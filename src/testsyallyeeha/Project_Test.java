@@ -120,12 +120,13 @@ public class Project_Test {
 		Odometer_Test odomter;
 		Thread odoThread = new Thread(odometer);
 		odoThread.start();
+		
 		//test 1 
 		if(buttonChoice==Button.ID_UP) {
 			(new Thread() {
 				public void run() {
-					//ultrasonic localization test (accuracy)
-					Localizer_Test.fallingEdge(odometer);
+					//add method : driver wheel radius test
+					Testers_Test.wheelRadCheck();
 				}
 			}).start();
 		}
@@ -133,8 +134,8 @@ public class Project_Test {
 		if(buttonChoice==Button.ID_RIGHT) {
 			(new Thread() {
 				public void run() {
-					//add method
-					Localizer_Test.risingEdge(odometer);
+					//add method : driver wheel base test
+					Testers_Test.trackCheck();
 				}
 			}).start();
 		}
@@ -142,8 +143,24 @@ public class Project_Test {
 		if(buttonChoice==Button.ID_DOWN) {
 			(new Thread() {
 				public void run() {
-					//add method
-					Localizer_Test.ultrasonicLite(odometer);
+					//add method : ultrasonic localization accuracy test, repeat 5 times with 5 seconds in between
+					Localizer_Test.fallingEdge(odometer);
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Localizer_Test.fallingEdge(odometer);
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Localizer_Test.fallingEdge(odometer);
+					
+					
 				}
 			}).start();
 		}
@@ -151,8 +168,21 @@ public class Project_Test {
 		if(buttonChoice==Button.ID_LEFT) {
 			(new Thread() {
 				public void run() {
-					//add method
-					//for testing the lightlocalizer lite
+					//add method: light localization accuracy test, repeat 3 times with 5 sec between reps
+					Localizer_Test.lightLocalizeLite(odometer);
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Localizer_Test.lightLocalizeLite(odometer);
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					Localizer_Test.lightLocalizeLite(odometer);
 				}
 			}).start();

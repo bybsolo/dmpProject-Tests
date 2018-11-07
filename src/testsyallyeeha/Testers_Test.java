@@ -137,5 +137,16 @@ public class Testers_Test {
 //		}
 	}
 	
-	
+	// the following section is designed for making new testing routines
+	/*
+	 * for odometer testing 
+	 * place the robot at (1,1), and facing at exactly zero degree
+	 * odometer.setXYT(TILE_SIZE, TILE_SIZE, 0);
+	 * Navigation_Test.travelTo(2,2);
+	 * Navigation_Test.travelTo(2,5);
+	 * Navigation_Test.travelTo(3,3);
+	 * Navigation_Test.travelTo(3, 2.5);
+	 * System.out.println(odometer.getXYT()[0], odometer.getXYT()[1], odometer.getXYT()[2]);
+	 * 
+	 */
 }
