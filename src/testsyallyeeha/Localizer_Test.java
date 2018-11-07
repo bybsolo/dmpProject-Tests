@@ -295,6 +295,8 @@ public class Localizer_Test {
 	}
 	
 	public static void lightLocalizeLite(Odometer_Test odometer) {
+		
+		//CONSULT ZAK WITH THE DIFF FILTER IMPLEMENTATION
 		leftMotor.forward();
 		rightMotor.forward();
 
