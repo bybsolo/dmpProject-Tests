@@ -1,5 +1,7 @@
 package testsyallyeeha;
 
+import java.util.concurrent.TimeUnit;
+
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
@@ -294,9 +296,32 @@ public class Localizer_Test {
   	    rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 50), false);
 	}
 	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////NOTE TO ETHAN: bro im not sure about this differential filter.... this shit so weird 
+	/////I mean diff needs 2 viable reading which is harder than just one
+	////////////////this shit so dumb/////////////////////////////////
+	
+	public static boolean leftDetection(SampleProvider myLineSample, float[] sampleLine) {
+		//add a filter
+		int reading1;
+		myLineSample.fetchSample(sampleLine, 0);
+		reading1 = (int)(sampleLine[0]*1000.0);
+		try {
+			TimeUnit.MILLISECONDS.sleep(10);
+			} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		int reading2;
+		myLineSample.fetchSample(sampleLine, 0);
+		reading2 = (int)(sampleLine[0]*1000.0);
+		if(reading1-reading2 >= 100) return true;
+		else return false;
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	public static void lightLocalizeLite(Odometer_Test odometer) {
-		
-		//CONSULT ZAK WITH THE DIFF FILTER IMPLEMENTATION
 		leftMotor.forward();
 		rightMotor.forward();
 
@@ -350,8 +375,11 @@ public class Localizer_Test {
 
 			leftTurn = -1;
 			rightTurn = 1;
-
-			odometer.setXYT(TILE_SIZE, TILE_SIZE, 0);
+			
+			if(Project_Test.Cornor == 0) odometer.setXYT(TILE_SIZE, TILE_SIZE, 0);
+			if(Project_Test.Cornor == 1) odometer.setXYT(7*TILE_SIZE, TILE_SIZE, 270);
+			if(Project_Test.Cornor == 2) odometer.setXYT(7*TILE_SIZE, 7*TILE_SIZE, 180);
+			if(Project_Test.Cornor == 3) odometer.setXYT(TILE_SIZE, 7*TILE_SIZE, 90);
 
 		}
 	}
