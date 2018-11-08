@@ -107,8 +107,8 @@ public class Testers_Test {
 			// There is nothing to be done here
 		}
 		//move the robot forward until the Y asis is detected
-		leftMotor.setSpeed(100);
-		rightMotor.setSpeed(100);
+		leftMotor.setSpeed(150);
+		rightMotor.setSpeed(150);
 		leftMotor.rotate(Navigation_Test.convertAngle(Project_Test.WHEEL_RAD, Project_Test.TRACK, 360), true);
 		rightMotor.rotate(-Navigation_Test.convertAngle(Project_Test.WHEEL_RAD, Project_Test.TRACK, 360), false);
 	}
@@ -141,12 +141,50 @@ public class Testers_Test {
 	/*
 	 * for odometer testing 
 	 * place the robot at (1,1), and facing at exactly zero degree
-	 * odometer.setXYT(TILE_SIZE, TILE_SIZE, 0);
-	 * Navigation_Test.travelTo(2,2);
-	 * Navigation_Test.travelTo(2,5);
-	 * Navigation_Test.travelTo(3,3);
-	 * Navigation_Test.travelTo(3, 2.5);
-	 * System.out.println(odometer.getXYT()[0], odometer.getXYT()[1], odometer.getXYT()[2]);
+	 odometer.setXYT(TILE_SIZE, TILE_SIZE, 0);
+	 Navigation_Test.travelTo(2,2);
+	 Navigation_Test.travelTo(2,5);
+	 Navigation_Test.travelTo(3,3);
+	 Navigation_Test.travelTo(3, 2.5);
+	 System.out.println(odometer.getXYT()[0], odometer.getXYT()[1], odometer.getXYT()[2]);
 	 * 
 	 */
+	
+	//add method: light localization accuracy test, repeat 3 times with 5 sec between reps
+	/*Localizer_Test.lightLocalizeLite(odometer);
+	try {
+		Thread.sleep(5000);
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	Localizer_Test.lightLocalizeLite(odometer);
+	try {
+		Thread.sleep(5000);
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	Localizer_Test.lightLocalizeLite(odometer);
+	*/
+	
+	
+	//ultrasonicn test
+	/*
+	Localizer_Test.fallingEdge(odometer);
+	try {
+		Thread.sleep(5000);
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	Localizer_Test.fallingEdge(odometer);
+	try {
+		Thread.sleep(5000);
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	Localizer_Test.fallingEdge(odometer);
+	*/
 }

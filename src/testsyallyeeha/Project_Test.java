@@ -3,6 +3,9 @@ package testsyallyeeha;
 import lejos.hardware.sensor.*;
 import testsyallyeeha.Odometer_Test;
 import testsyallyeeha.OdometerExceptions_Test;
+
+import java.util.concurrent.TimeUnit;
+
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
@@ -51,12 +54,12 @@ public class Project_Test {
 	public static final int UNLOAD_ANGLE = 110; //the angle the arm motor needs to turn to unload the ring(s), with respect to the initial position 
 	
 	//The operating parameters for the navigation and diver system
-	public static final double OFF_SET = 2; //this is the offset from the 2 line-detecting light sensors to the wheel base
+	public static final double OFF_SET = 2.5; //this is the offset from the 2 line-detecting light sensors to the wheel base
 	public static final int LOW_SPEED = 50; //this is the slow speed for precise movement 
 	public static final int MEDIUM_SPEED = 100; //this is the medium speed for intermediate movement
 	public static final int HIGH_SPEED = 200; //this is the fast motor speed for less precious, faster movement (long distance travel)
 	public static final double WHEEL_RAD = 2.085; //the wheel radius of the wheels
-	public static final double TRACK = 14.2; //the wheel base of the robot
+	public static final double TRACK = 14.7; //the wheel base of the robot
 	public static final double TILE_SIZE = 30.48; //the tile length of the grid
 	public static final int APPROACH = 20; //distance moved when probing the ring 
 	public static final int DISTANCE = 45; //distance from the wall used by the ultrasonic sensor during the ultrasonic localization 
@@ -143,23 +146,8 @@ public class Project_Test {
 		if(buttonChoice==Button.ID_DOWN) {
 			(new Thread() {
 				public void run() {
-					//add method : ultrasonic localization accuracy test, repeat 5 times with 5 seconds in between
-					Localizer_Test.fallingEdge(odometer);
-					try {
-						Thread.sleep(5000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					Localizer_Test.fallingEdge(odometer);
-					try {
-						Thread.sleep(5000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					Localizer_Test.fallingEdge(odometer);
-					
+					//add method : 
+					Localizer_Test.lightLocalizeLite(odometer);
 					
 				}
 			}).start();
@@ -168,22 +156,8 @@ public class Project_Test {
 		if(buttonChoice==Button.ID_LEFT) {
 			(new Thread() {
 				public void run() {
-					//add method: light localization accuracy test, repeat 3 times with 5 sec between reps
-					Localizer_Test.lightLocalizeLite(odometer);
-					try {
-						Thread.sleep(5000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					Localizer_Test.lightLocalizeLite(odometer);
-					try {
-						Thread.sleep(5000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					Localizer_Test.lightLocalizeLite(odometer);
+					//add method here: test the new filter 
+				
 				}
 			}).start();
 		}

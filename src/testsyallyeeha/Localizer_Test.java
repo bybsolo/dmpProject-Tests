@@ -2,6 +2,7 @@ package testsyallyeeha;
 
 import java.util.concurrent.TimeUnit;
 
+import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
@@ -21,12 +22,12 @@ public class Localizer_Test {
 	private static final Port portLeftLine = Project_Test.portLeftLine;
 	private static final SensorModes myLeftLine = Project_Test.myLeftLine;
 	private static final SampleProvider myLeftLineSample = Project_Test.myLeftLineSample;
-	private static final float[] sampleLeftLine = Project_Test.sampleLeftLine;
+	private static final float[] sampleLeftLine = new float[1];
 	
 	private static final Port portRightLine = Project_Test.portRightLine;
 	private static final SensorModes myRightLine = Project_Test.myRightLine;
 	private static final SampleProvider myRightLineSample = Project_Test.myRightLineSample;
-	private static final float[] sampleRightLine = Project_Test.sampleRightLine;
+	private static final float[] sampleRightLine = new float[1];
 	
 	private static final Port portColor = Project_Test.portColor; // get the port for the light (color sensor)
 	private static final SensorModes myColor = Project_Test.myColor; // create the color sensor object
@@ -53,6 +54,9 @@ public class Localizer_Test {
 	private static final int LOW_SPEED = Project_Test.LOW_SPEED; //this is the slow speed for precise movement 
 	private static final int MEDIUM_SPEED = Project_Test.MEDIUM_SPEED; //this is the medium speed for intermediate movement
 	private static final int HIGH_SPEED = Project_Test.HIGH_SPEED; //this is the fast motor speed for less precious, faster movement (long distance travel)
+
+	private static int[] filterCoeff = {1,1,-1, -1};
+	
 	
 	/**
 	 * This is the falling edge method used when the robots starts facing away from the wall (distance larger than D) 
@@ -130,7 +134,7 @@ public class Localizer_Test {
 	  	    
 	  	    //calculate the change in angle and then turn to the adjusted orientation
 	  	    //delta is the angle of the real 0 axis when we use initial orientation as 0 axis 
-	  	    double delta = (alpha+beta)/2 -219; 
+	  	    double delta = (alpha+beta)/2 -221; 
 	  	    if (delta<0) delta = 360+delta;
 	  	    //turn to the real zero axis
 	  	    leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, (delta-odometer.getXYT()[2])), true);
@@ -228,7 +232,7 @@ public class Localizer_Test {
       	    
       	    //calculate the change in angle and then turn to the adjusted orientation
       	    //delta is the angle of the real 0 axis in the system where the original heading was the zero axis.
-      	    double delta = (alpha+beta)/2 -41;
+      	    double delta = (alpha+beta)/2 -43;
       	    if(delta <0) delta = 360+delta;
       	    //turn to the real 0 axis
       	    leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, (delta-odometer.getXYT()[2])), true);
@@ -296,92 +300,216 @@ public class Localizer_Test {
   	    rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 50), false);
 	}
 	
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/////NOTE TO ETHAN: bro im not sure about this differential filter.... this shit so weird 
-	/////I mean diff needs 2 viable reading which is harder than just one
-	////////////////this shit so dumb/////////////////////////////////
-	
-	public static boolean leftDetection(SampleProvider myLineSample, float[] sampleLine) {
-		//add a filter
-		int reading1;
-		myLineSample.fetchSample(sampleLine, 0);
-		reading1 = (int)(sampleLine[0]*1000.0);
-		try {
-			TimeUnit.MILLISECONDS.sleep(10);
-			} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+	public static int lineDetection() {
+		//add a  differential filter
+		int[] readingsLeft = new int[4];
+		int[] readingsRight = new int[4];
+		int[] filterCoeff = {1,1,-1,-1};
+		int differentialLeft = 0;
+		int differentialRight = 0;
+		for(int i = 0; i<4; i++) {
+			myLeftLineSample.fetchSample(sampleLeftLine, 0);
+			readingsLeft[i] = (int)(sampleLeftLine[0]*1000.0);
+			myRightLineSample.fetchSample(sampleRightLine, 0);
+			readingsRight[i] = (int)(sampleRightLine[0]*1000.0);
+			System.out.println();
+			System.out.println();
+			differentialLeft += readingsLeft[i]*filterCoeff[i];
+			differentialRight += readingsRight[i]*filterCoeff[i];
 		}
-		int reading2;
-		myLineSample.fetchSample(sampleLine, 0);
-		reading2 = (int)(sampleLine[0]*1000.0);
-		if(reading1-reading2 >= 100) return true;
-		else return false;
+		if(differentialLeft >= 50 && differentialRight >= 50) return 3;
+		else if(differentialLeft >= 50) return 1;
+		else if(differentialRight >= 50) return 2;
+		
+		return 0;
 	}
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//	public static boolean leftLineDetection() {
+//		//add a  differential filter
+//		int[] readings = new int[4];
+//		int differential = 0;
+//		for (int i = 0; i < 4; i++) {
+//			myLeftLineSample.fetchSample(sampleLeftLine, 0);
+//			readings[i] = (int) (sampleLeftLine[0] * 1000.0);
+//			System.out.println();
+//			differential += readings[i] * filterCoeff[i];
+//		}
+//		if (differential >= 50) {
+//			return true;
+//		} else
+//			return false;
+//		}
+//	
+//	
+//	public static boolean rightLineDetection() {
+//		//add a  differential filter
+//		int[] readings = new int[4];
+//		int differential = 0;
+//		for(int i = 0; i<4; i++) {
+//			myRightLineSample.fetchSample(sampleRightLine, 0);
+//			readings[i] = (int)(sampleRightLine[0]*1000.0);
+//			System.out.println();
+//			differential += readings[i]*filterCoeff[i];
+//		}
+//		if(differential >= 50) {
+//			return true;
+//		}
+//		else return false;
+//		}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//	public static boolean leftLineDetected() {
+//		int[] readings = new int[8];
+//		for(int i = 0; i<8; i++) {	
+//			myLeftLineSample.fetchSample(sampleLeftLine, 0);
+//			readings[i] = (int) (sampleLeftLine[0] * 1000.0);
+//		}
+//		int differential = readings[0]+readings[1]+readings[2]+readings[3]- readings[4]-readings[5]-readings[6]-readings[7];
+//		if(differential >= 50) {
+//			return true;
+//		}
+//		else return false;
+//	}
+//	
+//	public static boolean rightLineDetected() {
+//		int[] readings = new int[8];
+//		for(int i = 0; i<8; i++) {	
+//			myRightLineSample.fetchSample(sampleRightLine, 0);
+//			readings[i] = (int) (sampleRightLine[0] * 1000.0);
+//		}
+//		int differential = readings[0]+readings[1]+readings[2]+readings[3]- readings[4]-readings[5]-readings[6]-readings[7];
+//		if(differential >= 50) {
+//			return true;
+//		}
+//		else return false;
+//	}
+	
 	
 	public static void lightLocalizeLite(Odometer_Test odometer) {
-		leftMotor.forward();
-		rightMotor.forward();
-
-		boolean leftDetected = false;
-		boolean rightDetected = false;
-
-		int localizationCount = 0;
-
-		int leftTurn = 1;
-		int rightTurn = -1;
-
-		while (localizationCount != 2) {
-
-			while (leftDetected && rightDetected) {
-
-				leftMotor.forward();
-				rightMotor.forward();
-
-				myLeftLine.fetchSample(sampleLeftLine, 0); // get the reading from the sensor
-				float leftRead = sampleLeftLine[0] * 1000; // multiply the read by 1000 as suggested in the class slides
-				if (leftRead < THRESHOLD) {
-					leftDetected = true;
-					leftMotor.stop();
-				}
-				myLeftLine.fetchSample(sampleLeftLine, 0); // get the reading from the sensor
-				float rightRead = sampleLeftLine[0] * 1000; // multiply the read by 1000 as suggested in the class
-															// slides
-				if (rightRead < THRESHOLD) {
-					rightDetected = true;
-					rightMotor.stop();
-				}
-
+		leftMotor.setSpeed(75);
+		rightMotor.setSpeed(75);
+		boolean left = false;
+		boolean right = false;
+		leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+		rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+		
+		while (left == false && right == false) {
+			leftMotor.forward();
+			rightMotor.forward();
+			if (lineDetection() ==3) {
+				leftMotor.stop();
+				rightMotor.stop();
+				break;
 			}
-
-			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
-			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
-
-			leftMotor.stop(true);
-			rightMotor.stop(false);
-
-			leftMotor.rotate(leftTurn * Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
-			rightMotor.rotate(rightTurn * Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
-
-			leftMotor.stop(true);
-			rightMotor.stop(false);
-
-			localizationCount++;
-
-			leftDetected = false;
-			rightDetected = false;
-
-			leftTurn = -1;
-			rightTurn = 1;
-			
-			if(Project_Test.Cornor == 0) odometer.setXYT(TILE_SIZE, TILE_SIZE, 0);
-			if(Project_Test.Cornor == 1) odometer.setXYT(7*TILE_SIZE, TILE_SIZE, 270);
-			if(Project_Test.Cornor == 2) odometer.setXYT(7*TILE_SIZE, 7*TILE_SIZE, 180);
-			if(Project_Test.Cornor == 3) odometer.setXYT(TILE_SIZE, 7*TILE_SIZE, 90);
-
+			else if (lineDetection()==1) {
+				leftMotor.stop();
+				left = true;
+				//break;
+		
+			}
+			else if (lineDetection()==2) {
+				rightMotor.stop();
+				right = true;
+				//break;
+			}
 		}
+		
+
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
+		
+		leftMotor.stop();
+		rightMotor.stop();
+		
+		leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+		rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+		
+		left = false;
+		right = false;
+		
+		while (left == false && right == false) {
+			leftMotor.forward();
+			rightMotor.forward();
+			if (lineDetection() ==3) {
+				leftMotor.stop();
+				rightMotor.stop();
+				break;
+			}
+			
+			else if (lineDetection()==1) {
+				leftMotor.stop();
+				left = true;
+				//break;
+			}
+			else if (lineDetection()==2) {
+				rightMotor.stop();
+				right = true;
+				//break;
+			}
+		}
+		
+
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
+		
+//		leftMotor.setSpeed(100);
+//		rightMotor.setSpeed(100);
+//		
+//		boolean leftDetected = false;
+//		boolean rightDetected = false;
+//
+//		int localizationCount = 0;
+//
+//		int leftTurn = 1;
+//		int rightTurn = -1;
+//
+//		while (localizationCount != 2) {
+//
+//			while (!(leftDetected && rightDetected)) {
+//
+//				leftMotor.forward();
+//				rightMotor.forward();
+//
+//				if (lineDetection()==1) {
+//					leftDetected = true;
+//					leftMotor.stop();
+//				}
+//			
+//				if (lineDetection()==2) {
+//					rightDetected = true;
+//					rightMotor.stop();
+//				}
+//
+//			}
+//
+//			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
+//			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
+//
+//			leftMotor.stop(true);
+//			rightMotor.stop(false);
+//
+//			leftMotor.rotate(leftTurn * Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+//			rightMotor.rotate(rightTurn * Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+//
+//			leftMotor.stop(true);
+//			rightMotor.stop(false);
+//
+//			localizationCount++;
+//
+//			leftDetected = false;
+//			rightDetected = false;
+//
+//			leftTurn = -1;
+//			rightTurn = 1;
+//
+//		}
+		
+		if(Project_Test.Cornor == 0) odometer.setXYT(TILE_SIZE, TILE_SIZE, 0);
+		if(Project_Test.Cornor == 1) odometer.setXYT(7*TILE_SIZE, TILE_SIZE, 270);
+		if(Project_Test.Cornor == 2) odometer.setXYT(7*TILE_SIZE, 7*TILE_SIZE, 180);
+		if(Project_Test.Cornor == 3) odometer.setXYT(TILE_SIZE, 7*TILE_SIZE, 90);
+		
 	}
+	
 	
 }
