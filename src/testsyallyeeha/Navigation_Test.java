@@ -118,64 +118,71 @@ public class Navigation_Test {
 	    } catch (InterruptedException e) {
 	    }
 	    
-	    leftMotor.forward();
-	    rightMotor.forward();
-  	    
-  	    boolean leftDetected = false;
-  	    boolean rightDetected = false;
-  	    
-  	    int localizationCount = 0;
-  	    
-  	    int leftTurn = 1;
-  	    int rightTurn = -1;
-  	    
-  	    while (localizationCount != 2) {
-  	    
-	  	    while (leftDetected && rightDetected) {
-	  	    	
-				leftMotor.forward();
-				rightMotor.forward();
-	  	    	
-	  	    	myLeftLine.fetchSample(sampleLeftLine, 0); //get the reading from the sensor
-			    float leftRead = sampleLeftLine[0]*1000;  //multiply the read by 1000 as suggested in the class slides
-				if (leftRead<THRESHOLD) {
-					leftDetected = true;
-					leftMotor.stop();
-				}
-				myLeftLine.fetchSample(sampleLeftLine, 0); //get the reading from the sensor
-			    float rightRead = sampleLeftLine[0]*1000;  //multiply the read by 1000 as suggested in the class slides
-				if (rightRead<THRESHOLD) {
-					rightDetected = true;
-					rightMotor.stop();
-				}
-	  	    	
-	  	    }
-	  	    
-	  	    //////////////////////////////5 is a hard coded value must be tested//////////////////////////////////////////////
-	  	    ///////////////////////////////////////////////////////////////////
-	  	    leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5),true);
-	  	  	rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5),false);
-	  	  	
-	  	  	leftMotor.stop(true);
-	  	    rightMotor.stop(false);
-	  	    
-	  	    leftMotor.rotate(leftTurn * Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90),true);
-	  	    rightMotor.rotate(rightTurn * Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90),false);
-	  	    
-	  	    leftMotor.stop(true);
-	  	    rightMotor.stop(false);
-	  	    
-	  	    localizationCount++;
-	  	    
-	  	    leftDetected = false;
-	  	    rightDetected = false;
-	  	    
-	  	    leftTurn = -1;
-	  	    rightTurn = 1;
-	  	    
-  	    }
+	    leftMotor.setSpeed(75);
+		rightMotor.setSpeed(75);
+		boolean left = false;
+		boolean right = false;
+		leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+		rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+		
+		while (left == false && right == false) {
+			leftMotor.forward();
+			rightMotor.forward();
+			if (Localizer_Test.lineDetection() ==3) {
+				leftMotor.stop();
+				rightMotor.stop();
+				break;
+			}
+			else if (Localizer_Test.lineDetection()==1) {
+				leftMotor.stop();
+				left = true;
+				//break;
+		
+			}
+			else if (Localizer_Test.lineDetection()==2) {
+				rightMotor.stop();
+				right = true;
+				//break;
+			}
+		}
+		
 
-  	  odometer.setXYT(x*TILE_SIZE, y*TILE_SIZE, 0);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
+		
+		leftMotor.stop();
+		rightMotor.stop();
+		
+		leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+		rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+		
+		left = false;
+		right = false;
+		
+		while (left == false && right == false) {
+			leftMotor.forward();
+			rightMotor.forward();
+			if (Localizer_Test.lineDetection() ==3) {
+				leftMotor.stop();
+				rightMotor.stop();
+				break;
+			}
+			
+			else if (Localizer_Test.lineDetection()==1) {
+				leftMotor.stop();
+				left = true;
+				//break;
+			}
+			else if (Localizer_Test.lineDetection()==2) {
+				rightMotor.stop();
+				right = true;
+				//break;
+			}
+		}
+		
+
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
 		
 	}
 	
