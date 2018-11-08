@@ -55,18 +55,13 @@ public class Localizer_Test {
 	private static final int MEDIUM_SPEED = Project_Test.MEDIUM_SPEED; //this is the medium speed for intermediate movement
 	private static final int HIGH_SPEED = Project_Test.HIGH_SPEED; //this is the fast motor speed for less precious, faster movement (long distance travel)
 
-	private static int[] filterCoeff = {1,1,-1, -1};
 	
 	
 	/**
 	 * This is the falling edge method used when the robots starts facing away from the wall (distance larger than D) 
 	 * It will first turn clockwise to detect the back wall (angle: alpha)
 	 * then counter-clockwise to detect the left wall (angle: beta)
-	 * @param usDistance the sensor data sampler
-	 * @param usData the sensor data buffer
 	 * @param odometer the odometer used to determine the robots orientation
-	 * @param leftMotor the left motor of the robot
-	 * @param rightMotor the right motor of the robot
 	 */
 	static void fallingEdge(Odometer_Test odometer) {
 		int distance;
@@ -134,7 +129,7 @@ public class Localizer_Test {
 	  	    
 	  	    //calculate the change in angle and then turn to the adjusted orientation
 	  	    //delta is the angle of the real 0 axis when we use initial orientation as 0 axis 
-	  	    double delta = (alpha+beta)/2 -221; 
+	  	    double delta = (alpha+beta)/2 -225; 
 	  	    if (delta<0) delta = 360+delta;
 	  	    //turn to the real zero axis
 	  	    leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, (delta-odometer.getXYT()[2])), true);
@@ -157,11 +152,7 @@ public class Localizer_Test {
 	 * This is the rising edge method used when the robots starts facing the wall (distance smaller than D); 
 	 * It will first turn clockwise to detect the left wall (angle: beta)
 	 * then counter-clockwise to detect the back wall (angle: alpha)
-	 * @param usDistance the sensor data sampler
-	 * @param usData the sensor data buffer
 	 * @param odometer the odometer used to determine the robots orientation
-	 * @param leftMotor the left motor of the robot
-	 * @param rightMotor the right motor of the robot
 	 */	
 	static void risingEdge(Odometer_Test odometer) {
 	    int distance;    
@@ -232,7 +223,7 @@ public class Localizer_Test {
       	    
       	    //calculate the change in angle and then turn to the adjusted orientation
       	    //delta is the angle of the real 0 axis in the system where the original heading was the zero axis.
-      	    double delta = (alpha+beta)/2 -43;
+      	    double delta = (alpha+beta)/2 -45;
       	    if(delta <0) delta = 360+delta;
       	    //turn to the real 0 axis
       	    leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, (delta-odometer.getXYT()[2])), true);
@@ -248,59 +239,15 @@ public class Localizer_Test {
 		}
 
 	}
-	
-	
-	public static void ultrasonicLite(Odometer_Test odometer) {
-		int distance;
-		usDistance.fetchSample(usData, 0);
-		distance = (int) (usData[0] * 100.0); 
-		
-		//rotate counter clockwise until no wall is found (can be optimized with a check to see whether the turn should be clockwise
-		//or counter clockwise depending on initial distacne 
-		while (distance < 255) {
-			
-			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
-		  	      motor.stop();
-			      motor.setAcceleration(3000);
-	  		    }
-			
-			leftMotor.setSpeed(MEDIUM_SPEED); 
-	  	    rightMotor.setSpeed(MEDIUM_SPEED);
-	  	    
-	  	    leftMotor.backward();
-		    rightMotor.forward();
-			
-		    usDistance.fetchSample(usData, 0);
-  		    distance = (int) (usData[0] * 100.0); 		    
-		    
-		}
-		
-		//once no wall is found continue to turn counter clockwise until the wall is found
-		//this garentees that we are facing the back left wall
-		while (distance > DISTANCE) {
-			
-			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
-		  	      motor.stop();
-			      motor.setAcceleration(3000);
-	  		    }
-			
-			leftMotor.setSpeed(MEDIUM_SPEED); 
-	  	    rightMotor.setSpeed(MEDIUM_SPEED);
-	  	    
-	  	    leftMotor.backward();
-		    rightMotor.forward();
-			
-		    usDistance.fetchSample(usData, 0);
-  		    distance = (int) (usData[0] * 100.0); 		    
-		    
-		}
-		
-		//hard coded value "50" to be determined by test
-		leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 50), true);
-  	    rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 50), false);
-	}
-	
 
+	 /**
+	  * The lineDetection() method is used to determine whether the left or right line detection sensor have picked up the line readings.
+	  * The detection situation is represented as integer values, for easier implementation of the method's returned result.
+	  * If only the left sensor have detected a line, the situation is labeled as 1.
+	  * If only the right sensor have detected a line, the situation is labeled as 1.
+	  * If both sensors have detected a line, the situation is labeled as 3.
+	  * @return the current situation regarding line detection, represented as integers 
+	  */
 	public static int lineDetection() {
 		//add a  differential filter
 		int[] readingsLeft = new int[4];
@@ -324,7 +271,7 @@ public class Localizer_Test {
 		
 		return 0;
 	}
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //	public static boolean leftLineDetection() {
 //		//add a  differential filter
 //		int[] readings = new int[4];
@@ -357,7 +304,7 @@ public class Localizer_Test {
 //		}
 //		else return false;
 //		}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //	public static boolean leftLineDetected() {
 //		int[] readings = new int[8];
 //		for(int i = 0; i<8; i++) {	
@@ -384,7 +331,12 @@ public class Localizer_Test {
 //		else return false;
 //	}
 	
-	
+	/**
+	 * The lightLocalizerLite() method is simplified version of light localization.
+	 * It utilizes the two light sensors installed in the front of the robot, and performs direction and position adjustment on the grid lines.
+	 * Notice the light localization should be performed only after the ultrasonic localization orients the robot to close to the 0-axis.
+	 * @param odometer the odometer used by the robot
+	 */
 	public static void lightLocalizeLite(Odometer_Test odometer) {
 		leftMotor.setSpeed(75);
 		rightMotor.setSpeed(75);
@@ -410,7 +362,7 @@ public class Localizer_Test {
 			else if (lineDetection()==2) {
 				rightMotor.stop();
 				right = true;
-				//break;
+				
 			}
 		}
 		
@@ -439,12 +391,11 @@ public class Localizer_Test {
 			else if (lineDetection()==1) {
 				leftMotor.stop();
 				left = true;
-				//break;
+				
 			}
 			else if (lineDetection()==2) {
 				rightMotor.stop();
 				right = true;
-				//break;
 			}
 		}
 		

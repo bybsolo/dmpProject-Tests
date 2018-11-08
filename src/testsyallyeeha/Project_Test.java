@@ -59,7 +59,7 @@ public class Project_Test {
 	public static final int MEDIUM_SPEED = 100; //this is the medium speed for intermediate movement
 	public static final int HIGH_SPEED = 200; //this is the fast motor speed for less precious, faster movement (long distance travel)
 	public static final double WHEEL_RAD = 2.085; //the wheel radius of the wheels
-	public static final double TRACK = 14.7; //the wheel base of the robot
+	public static final double TRACK = 14.42; //the wheel base of the robot
 	public static final double TILE_SIZE = 30.48; //the tile length of the grid
 	public static final int APPROACH = 20; //distance moved when probing the ring 
 	public static final int DISTANCE = 45; //distance from the wall used by the ultrasonic sensor during the ultrasonic localization 
@@ -147,8 +147,48 @@ public class Project_Test {
 			(new Thread() {
 				public void run() {
 					//add method : 
+					Localizer_Test.fallingEdge(odometer);
 					Localizer_Test.lightLocalizeLite(odometer);
+					Navigation_Test.travelTo(3,2, odometer);
+					leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE/2), true);
+					rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE/2), false);
+					leftMotor.stop();
+					rightMotor.stop();
+					leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+					rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+					leftMotor.stop();
+					rightMotor.stop();
+					leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -6), true);
+					rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -6), false);
+					boolean left = false;
+					boolean right = false;
+					while (left == false && right == false) {
+						leftMotor.forward();
+						rightMotor.forward();
+						if (Localizer_Test.lineDetection() ==3) {
+							leftMotor.stop();
+							rightMotor.stop();
+							break;
+						}
+						else if (Localizer_Test.lineDetection()==1) {
+							leftMotor.stop();
+							left = true;
+							//break;
 					
+						}
+						else if (Localizer_Test.lineDetection()==2) {
+							rightMotor.stop();
+							right = true;
+							//break;
+						}
+					}
+
+					leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
+					rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
+					leftMotor.setSpeed(200);
+					rightMotor.setSpeed(200);
+					leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE*3), true);
+					rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE*3), false);
 				}
 			}).start();
 		}

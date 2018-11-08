@@ -2,6 +2,7 @@ package testsyallyeeha;
 
 import testsyallyeeha.Odometer_Test;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.SensorModes;
 import lejos.robotics.SampleProvider;
@@ -13,7 +14,13 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
  *
  */
 public class Navigation_Test {
-	
+	 
+	private static final EV3LargeRegulatedMotor leftMotor = Project_Test.leftMotor; // the motor for the left wheel
+	private static final EV3LargeRegulatedMotor rightMotor = Project_Test.rightMotor; // the motor for the right wheel
+	private static final EV3LargeRegulatedMotor armMotor = Project_Test.armMotor; // the motor for raising/lowering the																				// arm
+	private static final EV3MediumRegulatedMotor hookMotor = Project_Test.hookMotor; // the motor for motorizing the
+																						// hooks
+
 	  private static final int FORWARD_SPEED = Project_Test.HIGH_SPEED; 
 	  private static final int ROTATE_SPEED = Project_Test.MEDIUM_SPEED;
 	  private static final double WHEEL_RAD = Project_Test.WHEEL_RAD;
@@ -30,8 +37,7 @@ public class Navigation_Test {
 	  private static final SensorModes myRightLine = Project_Test.myRightLine;
 	  private static final SampleProvider myRightLineSample = Project_Test.myRightLineSample;
 	  private static final float[] sampleRightLine = Project_Test.sampleRightLine;
-		
-	  private static final int THRESHOLD = Project_Test.THRESHOLD;
+
 	
 	/**
 	 * This method is used to drive the robot to the destination point which is
@@ -41,10 +47,8 @@ public class Navigation_Test {
 	 * @param x the absolute x-coordinate of the destination, an integer value in double format
 	 * @param y the absolute y-coordinate of the destination, an integer value in double format
 	 * @param odometer the odometer object created in the main class
-	 * @param leftMotor the left motor of the robot 
-	 * @param rightmotor the right motor of the robot
 	 */	  	  
-	public static void travelTo(double x, double y, Odometer_Test odometer, EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor) {
+	public static void travelTo(double x, double y, Odometer_Test odometer) {
 		
 		//get the odometer readings to determine the action
 		double currentX = odometer.getXYT()[0]; //get the current x position in cm
@@ -52,8 +56,8 @@ public class Navigation_Test {
 		double currentT = odometer.getXYT()[2]; //get the current direction in degrees
 		
 		//calculate the moving distance and turning angle
-		double x1 = x*TILE_SIZE - 10; //waypoint x coordinate in cm
-		double y1 = y*TILE_SIZE - 10; //waypoint y coordinate in cm
+		double x1 = x*TILE_SIZE +15 ; //waypoint x coordinate in cm
+		double y1 = y*TILE_SIZE -15 ; //waypoint y coordinate in cm
 		double dDistance = Math.sqrt(Math.pow((x1 - currentX), 2) + Math.pow((y1 - currentY), 2));
 		
 		double dAngle = getDAngle(x1, y1, currentX, currentY);
@@ -89,24 +93,26 @@ public class Navigation_Test {
 	    leftMotor.rotate(convertDistance(WHEEL_RAD, dDistance), true);
 	    rightMotor.rotate(convertDistance(WHEEL_RAD, dDistance), false);
 	    
-	    boolean atPoint = false;
+//	    boolean atPoint = false;
+//	    
+//	    while (!atPoint) {
+//	    	
+//	    	if ((x1 - 10) < odometer.getXYT()[0] && (y1 - 10) < odometer.getXYT()[1]) {
+//	    		
+//	    		atPoint = true;
+//	    		
+//	    	}
+//	    	
+//	    }
+//	    
+//	    try {
+//		      Thread.sleep(500);
+//		} catch (InterruptedException e) {
+//		}
+	    double correctAngle = Math.toDegrees(Math.atan(-(y1-currentY)/(x1-currentX)));
 	    
-	    while (!atPoint) {
-	    	
-	    	if ((x1 - 10) < odometer.getXYT()[0] && (y1 - 10) < odometer.getXYT()[1]) {
-	    		
-	    		atPoint = true;
-	    		
-	    	}
-	    	
-	    }
-	    
-	    try {
-		      Thread.sleep(500);
-		} catch (InterruptedException e) {
-		}
-	    
-	    turnTo(-dAngle, currentT, leftMotor, rightMotor); //turn the robot to the direction of the new way point
+		leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, correctAngle), true);
+		rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, correctAngle), false);
 	    
 	    leftMotor.stop(true);
 		rightMotor.stop(false);
@@ -431,6 +437,16 @@ public class Navigation_Test {
 	    }
 	    
   	  odometer.setXYT(currentX + TILE_SIZE*1, currentY + TILE_SIZE*3, 0);
+		
+	}
+	
+	public void intersectionCorrection(Odometer_Test odometer) {
+		
+		
+	}
+	
+	public void lineCorrection(Odometer_Test odometer) {
+		
 		
 	}
  

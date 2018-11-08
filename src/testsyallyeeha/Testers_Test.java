@@ -106,12 +106,14 @@ public class Testers_Test {
 		} catch (InterruptedException e) {
 			// There is nothing to be done here
 		}
+		
 		//move the robot forward until the Y asis is detected
 		leftMotor.setSpeed(150);
 		rightMotor.setSpeed(150);
 		leftMotor.rotate(Navigation_Test.convertAngle(Project_Test.WHEEL_RAD, Project_Test.TRACK, 360), true);
 		rightMotor.rotate(-Navigation_Test.convertAngle(Project_Test.WHEEL_RAD, Project_Test.TRACK, 360), false);
 	}
+	
 	
 	
 	
@@ -143,9 +145,12 @@ public class Testers_Test {
 	 * place the robot at (1,1), and facing at exactly zero degree
 	 odometer.setXYT(TILE_SIZE, TILE_SIZE, 0);
 	 Navigation_Test.travelTo(2,2);
-	 Navigation_Test.travelTo(2,5);
-	 Navigation_Test.travelTo(3,3);
-	 Navigation_Test.travelTo(3, 2.5);
+	 System.out.println(odometer.getXYT()[0], odometer.getXYT()[1], odometer.getXYT()[2]);
+	 Thread.sleep(15000);
+	 Navigation_Test.travelTo(3,5);
+	 System.out.println(odometer.getXYT()[0], odometer.getXYT()[1], odometer.getXYT()[2]);
+	 Thread.sleep(15000);
+	 Navigation_Test.travelTo(3.5, 5);
 	 System.out.println(odometer.getXYT()[0], odometer.getXYT()[1], odometer.getXYT()[2]);
 	 * 
 	 */
