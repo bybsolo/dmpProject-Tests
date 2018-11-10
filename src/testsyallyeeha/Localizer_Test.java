@@ -272,64 +272,6 @@ public class Localizer_Test {
 		return 0;
 	}
 
-//	public static boolean leftLineDetection() {
-//		//add a  differential filter
-//		int[] readings = new int[4];
-//		int differential = 0;
-//		for (int i = 0; i < 4; i++) {
-//			myLeftLineSample.fetchSample(sampleLeftLine, 0);
-//			readings[i] = (int) (sampleLeftLine[0] * 1000.0);
-//			System.out.println();
-//			differential += readings[i] * filterCoeff[i];
-//		}
-//		if (differential >= 50) {
-//			return true;
-//		} else
-//			return false;
-//		}
-//	
-//	
-//	public static boolean rightLineDetection() {
-//		//add a  differential filter
-//		int[] readings = new int[4];
-//		int differential = 0;
-//		for(int i = 0; i<4; i++) {
-//			myRightLineSample.fetchSample(sampleRightLine, 0);
-//			readings[i] = (int)(sampleRightLine[0]*1000.0);
-//			System.out.println();
-//			differential += readings[i]*filterCoeff[i];
-//		}
-//		if(differential >= 50) {
-//			return true;
-//		}
-//		else return false;
-//		}
-
-//	public static boolean leftLineDetected() {
-//		int[] readings = new int[8];
-//		for(int i = 0; i<8; i++) {	
-//			myLeftLineSample.fetchSample(sampleLeftLine, 0);
-//			readings[i] = (int) (sampleLeftLine[0] * 1000.0);
-//		}
-//		int differential = readings[0]+readings[1]+readings[2]+readings[3]- readings[4]-readings[5]-readings[6]-readings[7];
-//		if(differential >= 50) {
-//			return true;
-//		}
-//		else return false;
-//	}
-//	
-//	public static boolean rightLineDetected() {
-//		int[] readings = new int[8];
-//		for(int i = 0; i<8; i++) {	
-//			myRightLineSample.fetchSample(sampleRightLine, 0);
-//			readings[i] = (int) (sampleRightLine[0] * 1000.0);
-//		}
-//		int differential = readings[0]+readings[1]+readings[2]+readings[3]- readings[4]-readings[5]-readings[6]-readings[7];
-//		if(differential >= 50) {
-//			return true;
-//		}
-//		else return false;
-//	}
 	
 	/**
 	 * The lightLocalizerLite() method is simplified version of light localization.
