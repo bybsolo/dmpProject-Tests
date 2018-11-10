@@ -340,62 +340,9 @@ public class Localizer_Test {
 				right = true;
 			}
 		}
-		
 
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
-		
-//		leftMotor.setSpeed(100);
-//		rightMotor.setSpeed(100);
-//		
-//		boolean leftDetected = false;
-//		boolean rightDetected = false;
-//
-//		int localizationCount = 0;
-//
-//		int leftTurn = 1;
-//		int rightTurn = -1;
-//
-//		while (localizationCount != 2) {
-//
-//			while (!(leftDetected && rightDetected)) {
-//
-//				leftMotor.forward();
-//				rightMotor.forward();
-//
-//				if (lineDetection()==1) {
-//					leftDetected = true;
-//					leftMotor.stop();
-//				}
-//			
-//				if (lineDetection()==2) {
-//					rightDetected = true;
-//					rightMotor.stop();
-//				}
-//
-//			}
-//
-//			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
-//			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
-//
-//			leftMotor.stop(true);
-//			rightMotor.stop(false);
-//
-//			leftMotor.rotate(leftTurn * Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
-//			rightMotor.rotate(rightTurn * Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
-//
-//			leftMotor.stop(true);
-//			rightMotor.stop(false);
-//
-//			localizationCount++;
-//
-//			leftDetected = false;
-//			rightDetected = false;
-//
-//			leftTurn = -1;
-//			rightTurn = 1;
-//
-//		}
 		
 		if(Project_Test.Cornor == 0) odometer.setXYT(TILE_SIZE, TILE_SIZE, 0);
 		if(Project_Test.Cornor == 1) odometer.setXYT(7*TILE_SIZE, TILE_SIZE, 270);

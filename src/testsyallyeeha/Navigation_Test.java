@@ -1,6 +1,7 @@
 package testsyallyeeha;
 
 import testsyallyeeha.Odometer_Test;
+import lejos.hardware.Sound;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.Port;
@@ -39,8 +40,6 @@ public class Navigation_Test {
 	private static final SampleProvider myRightLineSample = Project_Test.myRightLineSample;
 	private static final float[] sampleRightLine = Project_Test.sampleRightLine;
 
-	// THINGS TO ADD TO THE REAL ONE
-	// //////////////////////////////////////////////////
 	private static final double Island_LL_x = Project_Test.Island_LL_x; // x coordinate of the lower left corner of the island
 	private static final double Island_LL_y = Project_Test.Island_LL_y; // y coordinate of the lower left corner of the island
 	private static final double Island_UR_x = Project_Test.Island_UR_x; // x coordinate of the upper right corner of the island
@@ -61,7 +60,6 @@ public class Navigation_Test {
 	private static double currentX;
 	private static double currentY;
 	private static double currentT;
-	/////////////////////////////////////////////////////////////////////
  
 	/**
 	 * This method is used to drive the robot to the destination point which is
@@ -120,33 +118,34 @@ public class Navigation_Test {
 		}
 		else {
 			//four points
-			double X0 = x*TILE_SIZE -15 ; //waypoint x coordinate in cm
-			double Y0 = y*TILE_SIZE -15 ; //waypoint y coordinate in cm
-			double X1 = x*TILE_SIZE +15 ; //waypoint x coordinate in cm
-			double Y1 = y*TILE_SIZE -15 ; //waypoint y coordinate in cm
-			double X2 = x*TILE_SIZE +15 ; //waypoint x coordinate in cm
-			double Y2 = y*TILE_SIZE +15 ; //waypoint y coordinate in cm
-			double X3 = x*TILE_SIZE -15 ; //waypoint x coordinate in cm
-			double Y3 = y*TILE_SIZE +15 ; //waypoint y coordinate in cm
+			double X0 = x - 0.5 ; //waypoint x coordinate in cm
+			double Y0 = y- 0.5 ; //waypoint y coordinate in cm
+			double X1 = x+ 0.5 ; //waypoint x coordinate in cm
+			double Y1 = y- 0.5 ; //waypoint y coordinate in cm
+			double X2 = x+ 0.5 ; //waypoint x coordinate in cm
+			double Y2 = y+ 0.5 ; //waypoint y coordinate in cm
+			double X3 = x- 0.5 ; //waypoint x coordinate in cm
+			double Y3 = y+ 0.5 ; //waypoint y coordinate in cm
 			
 			double x1 = 0;
 			double y1 = 0;
 			int point = closestPoint(X0, Y0, X1, Y1, X2, Y2, X3, Y3, currentX, currentY);
+			
 			if(point == 0) {
-				x1 = X0;
-				y1 = Y0;
+				x1 = X0*TILE_SIZE;
+				y1 = Y0*TILE_SIZE;
 			}
 			if(point == 1) {
-				x1 = X1;
-				y1 = Y1;
+				x1 = X1*TILE_SIZE;
+				y1 = Y1*TILE_SIZE;
 			}
 			if(point == 2) {
-				x1 = X2;
-				y1 = Y2;
+				x1 = X2*TILE_SIZE;
+				y1 = Y2*TILE_SIZE;
 			}
 			if(point == 3) {
-				x1 = X3;
-				y1 = Y3;
+				x1 = X3*TILE_SIZE;
+				y1 = Y3*TILE_SIZE;
 			}
 			
 			//calculate the moving distance and turning angle
@@ -185,6 +184,8 @@ public class Navigation_Test {
 		    rightMotor.rotate(convertDistance(WHEEL_RAD, dDistance), false);
 		    
 		    intersectionCorrection(odometer);
+		    odometer.setX(x*TILE_SIZE);
+		    odometer.setY(y*TILE_SIZE);
 		}
 		
 	}
@@ -275,193 +276,150 @@ public class Navigation_Test {
 	  }
 	
 	
-public static void tunnelTravel(Odometer_Test odometer) {
-		
-		double LL_x = 0; //x coordinate of the lower left corner of the home section
-		double LL_y = 0; //y coordinate of the lower left corner of the home section
-		double UR_x = 0; //x coordinate of the upper right corner of the home section
-		double UR_y = 0; //y coordinate of the upper right corner of the home section
-		double TN_LL_x = 0; //x coordinate of the lower left of the tunnel
-		double TN_LL_y = 0; //y coordinate of the lower left of the tunnel
-		double TN_UR_x = 0; //x coordinate of the upper right of the tunnel
-		double TN_UR_y = 0; //y coordinate of the upper right of the tunnel
-		
-		boolean isTunnelVertical;
-		
-		if (Math.abs(TN_LL_x - TN_UR_x) ==1) {
-			
-			isTunnelVertical = true;
-			
-		} else {
-			
-			isTunnelVertical = false;
-			
-		}
-		
-		double leftPoint_x1;
-		double leftPoint_y1;
-		
-		double rightPoint_x1;
-		double rightPoint_y1;
-		
-		double leftPoint_x2;
-		double leftPoint_y2;
-		
-		double rightPoint_x2;
-		double rightPoint_y2;
-		
-		double dAngle;
-		
-		int point;
-		
+public static void tunnelTravel(Odometer_Test odometer) {		
+		boolean isTunnelVertical = (Math.abs(TN_LL_x - TN_UR_x) ==1);
+
+		double pointT0_x, pointT0_y, pointT1_x, pointT1_y, pointT2_x, pointT2_y, pointT3_x, pointT3_y;
+		double dAngle;	
 		double tunnelLength;
 		
 		if (isTunnelVertical) {
-			
 			tunnelLength = Math.abs(TN_LL_y - TN_UR_y);
-			
-//			if (y < TN_LL_y) {
-			
-				leftPoint_x1 = TN_LL_x;
-				leftPoint_y1 = TN_LL_y - 1;
-				
-				rightPoint_x1 = TN_LL_x + 1;
-				rightPoint_y1 = TN_LL_y - 1;
-				
-				leftPoint_x2 = TN_UR_x - 1;
-				leftPoint_y2 = TN_UR_y + 1;
-				
-				rightPoint_x2 = TN_UR_x;
-				rightPoint_y2 = TN_UR_y + 1;
-				
-//			} else {
-//				
-//				leftPoint_x1 = TN_LL_x;
-//				leftPoint_y1 = TN_LL_y + TILE_SIZE;
-//				
-//				rightPoint_x1 = TN_LL_x - TILE_SIZE;
-//				rightPoint_y1 = TN_LL_y + TILE_SIZE;
-//				
-//				leftPoint_x2 = TN_UR_x + TILE_SIZE;
-//				leftPoint_y2 = TN_UR_y - TILE_SIZE;
-//				
-//				rightPoint_x2 = TN_UR_x;
-//				rightPoint_y2 = TN_UR_y - TILE_SIZE;
-//				
-//			}
-			
+
+			pointT0_x = TN_LL_x;
+			pointT0_y = TN_LL_y - 1;
+
+			pointT1_x = TN_LL_x + 1;
+			pointT1_y = TN_LL_y - 1;
+
+			pointT2_x = TN_UR_x;
+			pointT2_y = TN_UR_y + 1;
+
+			pointT3_x = TN_UR_x - 1;
+			pointT3_y = TN_UR_y + 1;
+
 		} else {
-			
 			tunnelLength = Math.abs(TN_LL_x - TN_UR_x);
 			
-//			if (x < TN_LL_x) {
-				
-				leftPoint_x1 = TN_LL_x - 1;
-				leftPoint_y1 = TN_LL_y;
-				
-				rightPoint_x1 = TN_LL_x - 1;
-				rightPoint_y1 = TN_LL_y - 1;
-				
-				leftPoint_x2 = TN_UR_x + 1;
-				leftPoint_y2 = TN_UR_y + 1;
-				
-				rightPoint_x2 = TN_UR_x + 1;
-				rightPoint_y2 = TN_UR_y;
-				
-//			} else {
-//				
-//				leftPoint_x1 = TN_LL_x  + TILE_SIZE;
-//				leftPoint_y1 = TN_LL_y;
-//				
-//				rightPoint_x1 = TN_LL_x + TILE_SIZE;
-//				rightPoint_y1 = TN_LL_y + TILE_SIZE;
-//				
-//				leftPoint_x2 = TN_UR_x - TILE_SIZE;
-//				leftPoint_y2 = TN_UR_y - TILE_SIZE;
-//				
-//				rightPoint_x2 = TN_UR_x - TILE_SIZE;
-//				rightPoint_y2 = TN_UR_y;
-//				
-//			}
+			pointT0_x = TN_LL_x - 1;
+			pointT0_y = TN_LL_y;
+
+			pointT1_x = TN_UR_x + 1;
+			pointT1_y = TN_UR_y - 1;
+
+			pointT2_x = TN_UR_x + 1;
+			pointT2_y = TN_UR_y;
+
+			pointT3_x = TN_LL_x - 1;
+			pointT3_y = TN_LL_y + 1;
 			
 		}
 		currentX = odometer.getXYT()[0];
 		currentY = odometer.getXYT()[1];
 		currentT = odometer.getXYT()[2];
-		point = closestPoint(leftPoint_x1, leftPoint_y1, rightPoint_x1, rightPoint_y1, leftPoint_x2, leftPoint_y2, rightPoint_x2, rightPoint_y2, currentX, currentY);
+		int pointT = closestPoint(pointT0_x, pointT0_y, pointT1_x, pointT1_y, pointT2_x, pointT2_y, pointT3_x, pointT3_y, currentX, currentY);
 		
-		if (point == 0) {
-			Navigation_Test.travelTo(leftPoint_x1, leftPoint_y1, odometer);
-			currentX = odometer.getXYT()[0];
-			currentY = odometer.getXYT()[1];
-			currentT = odometer.getXYT()[2];
-			dAngle = Navigation_Test.getDAngle(rightPoint_x1, rightPoint_y1, currentX, currentY);
-			Navigation_Test.turnTo(dAngle, currentT);
-			
-		} else if (point == 1) {
-			Navigation_Test.travelTo(rightPoint_x1, rightPoint_y1, odometer);
-			currentX = odometer.getXYT()[0];
-			currentY = odometer.getXYT()[1];
-			currentT = odometer.getXYT()[2];
-			dAngle = Navigation_Test.getDAngle(leftPoint_x1, leftPoint_y1, currentX, currentY);
-			Navigation_Test.turnTo(dAngle, currentT);
-			
-		} else if (point == 2) {
-			Navigation_Test.travelTo(leftPoint_x2, leftPoint_y2, odometer);
-			currentX = odometer.getXYT()[0];
-			currentY = odometer.getXYT()[1];
-			currentT = odometer.getXYT()[2];
-			dAngle = Navigation_Test.getDAngle(rightPoint_x2, rightPoint_y2, currentX, currentY);
-			Navigation_Test.turnTo(dAngle, currentT);
-			
+		if (pointT == 0) {
+			Navigation_Test.travelTo(pointT0_x, pointT0_y, odometer);
+			if(isTunnelVertical) {
+				currentT = odometer.getXYT()[2];
+				double turn = smallAngle(currentT, 90);
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), false);
+			} else {
+				currentT = odometer.getXYT()[2];
+				double turn = smallAngle(currentT, 0);
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), false);
+			}
+		} else if (pointT == 1) {		
+			Navigation_Test.travelTo(pointT1_x, pointT1_y, odometer);
+			if(isTunnelVertical) {
+				currentT = odometer.getXYT()[2];
+				double turn = smallAngle(currentT, 270);
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), false);
+			} else {
+				currentT = odometer.getXYT()[2];
+				double turn = smallAngle(currentT, 0);
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), false);
+			}
+		} else if (pointT == 2) {
+			Navigation_Test.travelTo(pointT2_x, pointT2_y, odometer);
+			if(isTunnelVertical) {
+				currentT = odometer.getXYT()[2];
+				double turn = smallAngle(currentT, 270);
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), false);
+			} else {
+				currentT = odometer.getXYT()[2];
+				double turn = smallAngle(currentT, 180);
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), false);
+			}
 		} else {
-			
-			Navigation_Test.travelTo(rightPoint_x2, rightPoint_y2, odometer);
-			currentX = odometer.getXYT()[0];
-			currentY = odometer.getXYT()[1];
-			currentT = odometer.getXYT()[2];
-			
-			dAngle = Navigation_Test.getDAngle(leftPoint_x2, leftPoint_y2, currentX, currentY);
-			Navigation_Test.turnTo(dAngle, currentT);
-			
+			Navigation_Test.travelTo(pointT3_x, pointT3_y, odometer);
+			if(isTunnelVertical) {
+				currentT = odometer.getXYT()[2];
+				double turn = smallAngle(currentT, 90);
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), false);
+			} else {
+				currentT = odometer.getXYT()[2];
+				double turn = smallAngle(currentT, 180);
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, turn), false);
+			}
 		}
 		
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE/2), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE/2), false);
 		
-		leftMotor.stop(true);
-		rightMotor.stop(false);
+		leftMotor.stop();
+		rightMotor.stop();
 		
 		currentX = odometer.getXYT()[0];
 		currentY = odometer.getXYT()[1];
 		currentT = odometer.getXYT()[2];
 		
 		if (isTunnelVertical) {
-			
-			if (point == 0 || point == 1) {
-				
-				dAngle = Navigation_Test.getDAngle(leftPoint_x2+ 0.5, leftPoint_y2, currentX, currentY);
-				Navigation_Test.turnTo(dAngle, currentT);
-				
-			} else {
-				
-				dAngle = Navigation_Test.getDAngle(leftPoint_x1 + 0.5, leftPoint_y1, currentX, currentY);
-				Navigation_Test.turnTo(dAngle, currentT);
-				
+			if(pointT == 0) {
+				leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+				rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
 			}
 			
-		} else {
+			else if(pointT == 1) {
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+			}
 			
-			if (point == 0 || point == 1) {
-				
-				dAngle = Navigation_Test.getDAngle(leftPoint_x2, leftPoint_y2  + 0.5, currentX, currentY);
-				Navigation_Test.turnTo(dAngle, currentT);
-				
-			} else {
-				
-				dAngle = Navigation_Test.getDAngle(leftPoint_x1, leftPoint_y1 + 0.5, currentX, currentY);
-				Navigation_Test.turnTo(dAngle, currentT);
-				
+			else if(pointT == 2) {
+				leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+				rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+			}
+			else {
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+			}
+		} else {
+			if(pointT == 0) {
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+			}
+			
+			else if(pointT == 1) {
+				leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+				rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+			}
+			
+			else if(pointT == 2) {
+				leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+				rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+			}
+			else {
+				leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+				rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
 			}
 		}
 		
@@ -469,9 +427,11 @@ public static void tunnelTravel(Odometer_Test odometer) {
 		rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 7), false);
 		
 		lineCorrection(odometer);
-		
-		leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, (tunnelLength+1.8)*TILE_SIZE), true);
-		rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, (tunnelLength + 1.8)*TILE_SIZE), false);
+	
+		leftMotor.setSpeed(FORWARD_SPEED);
+		rightMotor.setSpeed(FORWARD_SPEED);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, (tunnelLength+1.8)*TILE_SIZE), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, (tunnelLength + 1.8)*TILE_SIZE), false);
 		
 		lineCorrection(odometer);
 		
@@ -479,19 +439,21 @@ public static void tunnelTravel(Odometer_Test odometer) {
 	
 	
 	public static void intersectionCorrection(Odometer_Test odometer) {
-		leftMotor.stop();
-		rightMotor.stop();
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		leftMotor.setSpeed(CORRECT_SPEED);
+		rightMotor.setSpeed(CORRECT_SPEED);
 		double fromOrientation = odometer.getXYT()[2];
 		double toOrientation;
 		if(fromOrientation >=0 && fromOrientation <90) toOrientation = 90;
 		else if (fromOrientation>=90 && fromOrientation<180) toOrientation = 180;
 		else if (fromOrientation >=180 && fromOrientation<270) toOrientation = 270; 
 		else toOrientation = 0;
-		leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK,smallAngle(fromOrientation, toOrientation)));
-		rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK,smallAngle(fromOrientation, toOrientation)));
+		leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK,smallAngle(fromOrientation, toOrientation)), true);
+		rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK,smallAngle(fromOrientation, toOrientation)), false);
 		
 		boolean left = false;
-		boolean right  =false;
+		boolean right =false;
 		while (left == false && right == false) {
 			leftMotor.forward();
 			rightMotor.forward();
@@ -502,18 +464,14 @@ public static void tunnelTravel(Odometer_Test odometer) {
 			}
 			else if (Localizer_Test.lineDetection()==1) {
 				leftMotor.stop();
-				left = true;
-				//break;
-		
+				left = true;	
 			}
 			else if (Localizer_Test.lineDetection()==2) {
 				rightMotor.stop();
-				right = true;
-				
+				right = true;			
 			}
 		}
 		
-
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
 		
@@ -546,9 +504,15 @@ public static void tunnelTravel(Odometer_Test odometer) {
 			}
 		}
 		
-
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
+		leftMotor.stop();
+		rightMotor.stop();
+		double currentT = odometer.getXYT()[2];
+		if(currentT >=45 && currentT<135) odometer.setTheta(90);
+		else if (currentT>=135 && currentT<225) odometer.setTheta(180);
+		else if (currentT>=225 && currentT<315) odometer.setTheta(270);
+		else odometer.setTheta(0);
 	}
 	
 	public static void lineCorrection(Odometer_Test odometer) {
@@ -585,7 +549,7 @@ public static void tunnelTravel(Odometer_Test odometer) {
 		double currentT = odometer.getXYT()[2];
 		if(currentT >=45 && currentT<135) odometer.setTheta(90);
 		else if (currentT>=135 && currentT<225) odometer.setTheta(180);
-		else if (currentT>=225 && currentT<315) odometer.setTheta(180);
+		else if (currentT>=225 && currentT<315) odometer.setTheta(270);
 		else odometer.setTheta(0);
 		
 		leftMotor.setSpeed(FORWARD_SPEED);

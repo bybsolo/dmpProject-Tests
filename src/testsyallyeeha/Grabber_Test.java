@@ -29,11 +29,10 @@ public class Grabber_Test {
 	private static final double TILE_SIZE = Project_Test.TILE_SIZE;
 	private static final double OFF_SET = Project_Test.OFF_SET;
 	
+	private static final double T_x = Project_Test.T_x;
+	private static final double T_y = Project_Test.T_y;
+	
 	public static void probe(Odometer_Test odometer) {
-
-		double T_x = 0; // x coordinate of the ring tree
-		double T_y = 0; // y coordinate of the ring tree
-
 		double[] odometerData = odometer.getXYT();
 		double x = odometerData[0];
 		double y = odometerData[1];
@@ -41,17 +40,17 @@ public class Grabber_Test {
 
 		int point;
 
-		double X0 = T_x * TILE_SIZE;
-		double Y0 = (T_y - 1) * TILE_SIZE;
+		double X0 = T_x;
+		double Y0 = T_y - 1;
 
-		double X1 = T_x * TILE_SIZE;
-		double Y1 = (T_y + 1) * TILE_SIZE;
+		double X1 = T_x ;
+		double Y1 = T_y + 1 ;
 
-		double X2 = (T_x + 1) * TILE_SIZE;
-		double Y2 = T_y * TILE_SIZE;
+		double X2 = T_x + 1 ;
+		double Y2 = T_y ;
 
-		double X3 = (T_x - 1) * TILE_SIZE;
-		double Y3 = T_y * TILE_SIZE;
+		double X3 = T_x - 1 ;
+		double Y3 = T_y;
 
 		int color;
 
@@ -91,31 +90,21 @@ public class Grabber_Test {
 		color = Color_Test.color();
 
 		if (color == 1 || color == 2 || color == 3 || color == 4) {
-
 			if (color == 1) {
-
 				Sound.beep();
-
 			} else if (color == 2) {
-
 				Sound.beep();
 				Sound.beep();
-
 			} else if (color == 3) {
-
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
-
 			} else {
-
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
-
 			}
-
 			Grabber_Test.openHook();
 
 		} else {
@@ -130,37 +119,24 @@ public class Grabber_Test {
 			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 20), false);
 
 			color = Color_Test.color();
-
 			if (color == 1 || color == 2 || color == 3 || color == 4) {
-
 				if (color == 1) {
-
 					Sound.beep();
-
 				} else if (color == 2) {
-
 					Sound.beep();
 					Sound.beep();
-
 				} else if (color == 3) {
-
 					Sound.beep();
 					Sound.beep();
 					Sound.beep();
-
-				} else {
-
+				} else if (color == 4){
 					Sound.beep();
 					Sound.beep();
 					Sound.beep();
 					Sound.beep();
-
-				}
-
+				} else {}
 				Grabber_Test.openHook();
-
 			}
-
 		}
 
 		leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 25), true);
@@ -209,7 +185,10 @@ public class Grabber_Test {
 	 */
 	public static void resetArm(EV3LargeRegulatedMotor armMotor) {
 		armMotor.setSpeed(ARM_SPEED);
-		//shit how to do this....
+		while(armMotor.getTachoCount()!= 0) {
+			armMotor.backward();
+		}
+		armMotor.resetTachoCount();
 	}
 	
 

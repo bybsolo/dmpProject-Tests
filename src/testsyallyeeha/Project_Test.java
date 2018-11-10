@@ -149,46 +149,14 @@ public class Project_Test {
 					//add method : 
 					Localizer_Test.fallingEdge(odometer);
 					Localizer_Test.lightLocalizeLite(odometer);
-					Navigation_Test.travelTo(3,2, odometer);
-					leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE/2), true);
-					rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE/2), false);
-					leftMotor.stop();
-					rightMotor.stop();
-					leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
-					rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
-					leftMotor.stop();
-					rightMotor.stop();
-					leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -6), true);
-					rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -6), false);
-					boolean left = false;
-					boolean right = false;
-					while (left == false && right == false) {
-						leftMotor.forward();
-						rightMotor.forward();
-						if (Localizer_Test.lineDetection() ==3) {
-							leftMotor.stop();
-							rightMotor.stop();
-							break;
-						}
-						else if (Localizer_Test.lineDetection()==1) {
-							leftMotor.stop();
-							left = true;
-							//break;
-					
-						}
-						else if (Localizer_Test.lineDetection()==2) {
-							rightMotor.stop();
-							right = true;
-							//break;
-						}
+					Sound.beep();
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-
-					leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
-					rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
-					leftMotor.setSpeed(200);
-					rightMotor.setSpeed(200);
-					leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE*3), true);
-					rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE*3), false);
+					Navigation_Test.tunnelTravel(odometer);
 				}
 			}).start();
 		}
