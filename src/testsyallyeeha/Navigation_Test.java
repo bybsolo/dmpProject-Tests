@@ -45,7 +45,7 @@ public class Navigation_Test {
 	private static final double Island_UR_x = Project_Test.Island_UR_x; // x coordinate of the upper right corner of the island
 	private static final double Island_UR_y = Project_Test.Island_UR_y; // y coordinate of the upper right corner of the island
 
-	private static final int Cornor = Project_Test.Cornor; // the starting corner
+	private static final int corner = Project_Test.corner; // the starting corner
 	private static final double LL_x = Project_Test.LL_x; // x coordinate of the lower left corner of the home section
 	private static final double LL_y = Project_Test.LL_y; // y coordinate of the lower left corner of the home section
 	private static final double UR_x = Project_Test.UR_x; // x coordinate of the upper right corner of the home section
@@ -376,8 +376,8 @@ public static void tunnelTravel(Odometer_Test odometer) {
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE/2), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE/2), false);
 		
-		leftMotor.stop();
-		rightMotor.stop();
+		leftMotor.stop(true);
+		rightMotor.stop(false);
 		
 		currentX = odometer.getXYT()[0];
 		currentY = odometer.getXYT()[1];
@@ -423,8 +423,8 @@ public static void tunnelTravel(Odometer_Test odometer) {
 			}
 		}
 		
-		leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 7), true);
-		rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 7), false);
+		leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 10), true);
+		rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 10), false);	
 		
 		lineCorrection(odometer);
 	
@@ -452,26 +452,27 @@ public static void tunnelTravel(Odometer_Test odometer) {
 		leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK,smallAngle(fromOrientation, toOrientation)), true);
 		rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK,smallAngle(fromOrientation, toOrientation)), false);
 		
-		boolean left = false;
-		boolean right =false;
-		while (left == false && right == false) {
-			leftMotor.forward();
-			rightMotor.forward();
-			if (Localizer_Test.lineDetection() ==3) {
-				leftMotor.stop();
-				rightMotor.stop();
-				break;
-			}
-			else if (Localizer_Test.lineDetection()==1) {
-				leftMotor.stop();
-				left = true;	
-			}
-			else if (Localizer_Test.lineDetection()==2) {
-				rightMotor.stop();
-				right = true;			
-			}
-		}
-		
+//		boolean left = false;
+//		boolean right =false;
+//		while (left == false && right == false) {
+//			leftMotor.forward();
+//			rightMotor.forward();
+//			if (Localizer_Test.lineDetection() ==3) {
+//				leftMotor.stop();
+//				rightMotor.stop();
+//				break;
+//			}
+//			else if (Localizer_Test.lineDetection()==1) {
+//				leftMotor.stop();
+//				left = true;	
+//			}
+//			else if (Localizer_Test.lineDetection()==2) {
+//				rightMotor.stop();
+//				right = true;			
+//			}
+//		}
+		adjustment();
+		Sound.beep();
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
 		
@@ -481,29 +482,30 @@ public static void tunnelTravel(Odometer_Test odometer) {
 		leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
 		rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
 		
-		left = false;
-		right = false;
-		
-		while (left == false && right == false) {
-			leftMotor.forward();
-			rightMotor.forward();
-			if (Localizer_Test.lineDetection() ==3) {
-				leftMotor.stop();
-				rightMotor.stop();
-				break;
-			}
-			
-			else if (Localizer_Test.lineDetection()==1) {
-				leftMotor.stop();
-				left = true;
-				
-			}
-			else if (Localizer_Test.lineDetection()==2) {
-				rightMotor.stop();
-				right = true;
-			}
-		}
-		
+//		left = false;
+//		right = false;
+//		
+//		while (left == false && right == false) {
+//			leftMotor.forward();
+//			rightMotor.forward();
+//			if (Localizer_Test.lineDetection() ==3) {
+//				leftMotor.stop();
+//				rightMotor.stop();
+//				break;
+//			}
+//			
+//			else if (Localizer_Test.lineDetection()==1) {
+//				leftMotor.stop();
+//				left = true;
+//				
+//			}
+//			else if (Localizer_Test.lineDetection()==2) {
+//				rightMotor.stop();
+//				right = true;
+//			}
+//		}
+		adjustment();
+		Sound.beep();
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
 		leftMotor.stop();
@@ -516,36 +518,44 @@ public static void tunnelTravel(Odometer_Test odometer) {
 	}
 	
 	public static void lineCorrection(Odometer_Test odometer) {
-		leftMotor.stop();
-		rightMotor.stop();
+		leftMotor.stop(true);
+		rightMotor.stop(false);
 		leftMotor.setSpeed(CORRECT_SPEED);
 		rightMotor.setSpeed(CORRECT_SPEED);
 		
-		boolean left = false;
-		boolean right = false;
-		while (left == false && right == false) {
-			leftMotor.forward();
-			rightMotor.forward();
-			if (Localizer_Test.lineDetection() ==3) {
-				leftMotor.stop();
-				rightMotor.stop();
-				break;
-			}
-			else if (Localizer_Test.lineDetection()==1) {
-				leftMotor.stop();
-				left = true;
+///////////////////////////////////////////////////////////////////////////////	
+//		boolean left = false;
+//		boolean right = false;
+//		while (left == false && right == false) {
+//			leftMotor.forward();
+//			rightMotor.forward();
+//			if (Localizer_Test.lineDetection() ==3) {
+//				Sound.beepSequence();
+//				leftMotor.stop(true);
+//				rightMotor.stop(false);
+//				break;
+//			}
+//			else if (Localizer_Test.lineDetection()==1) {
+//				Sound.beep();
+//				leftMotor.stop();
+//				left = true;
+//		
+//			}
+//			else if (Localizer_Test.lineDetection()==2) {
+//				Sound.beep();
+//				rightMotor.stop();
+//				right = true;
+//			}
+//		}
+
+		adjustment();	
 		
-			}
-			else if (Localizer_Test.lineDetection()==2) {
-				rightMotor.stop();
-				right = true;
-			}
-		}
+		Sound.beep();
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
 		
-		leftMotor.stop();
-		rightMotor.stop();
+		leftMotor.stop(true);
+		rightMotor.stop(false);
 		double currentT = odometer.getXYT()[2];
 		if(currentT >=45 && currentT<135) odometer.setTheta(90);
 		else if (currentT>=135 && currentT<225) odometer.setTheta(180);
@@ -587,6 +597,63 @@ public static void tunnelTravel(Odometer_Test odometer) {
 			}
 		}
 		return point;
+
+	}
+	
+	public static void adjustment() {
+		boolean left = false;
+		boolean right = false;
+		boolean firstStop = true;
+		while (left == false || right == false) {
+			int lineStatus = Localizer_Test.lineDetection();
+			if (lineStatus == 3) {
+				System.out.print("return 3");
+				if(left == false) {
+					if(firstStop) {
+						leftMotor.stop(true);
+						firstStop = false;
+					}
+					else {
+						leftMotor.stop(false);
+					}
+				}
+				if(right == false) {
+					if(firstStop) {
+						rightMotor.stop(true);
+					}
+					else {
+						rightMotor.stop(false);
+					}
+				}
+				break;
+			} else if (lineStatus == 1) {	//left detected	
+				if(firstStop) {
+					leftMotor.stop(true);
+					firstStop = false;
+				}
+				else {
+					leftMotor.stop(false);
+				}
+				left = true;
+
+			} else if (lineStatus == 2) {	//right detected
+				if(firstStop) {
+					rightMotor.stop(true);
+					firstStop = false;
+				}
+				else {
+					rightMotor.stop(false);
+				}
+				right = true;
+			} else {
+				if (left == false) {
+					leftMotor.forward();
+				}
+				if (right == false) {
+					rightMotor.forward();
+				}
+			}
+		}
 
 	}
 }
