@@ -61,7 +61,8 @@ public class Project_Test {
 	public static final double WHEEL_RAD = 2.085; //the wheel radius of the wheels
 	public static final double TRACK = 14.42; //the wheel base of the robot
 	public static final double TILE_SIZE = 30.48; //the tile length of the grid
-	public static final int APPROACH = 20; //distance moved when probing the ring 
+	public static final double HIGH_PROBE = 15;
+	public static final double LOW_PROBE = 5;
 	public static final int DISTANCE = 45; //distance from the wall used by the ultrasonic sensor during the ultrasonic localization 
 	public static final int THRESHOLD = 300; //this is the line detection threshold for the line detecting color sensors
 	

@@ -37,6 +37,9 @@ public class Grabber_Test {
 	private static final double TRACK = Project_Test.TRACK;
 	private static final double TILE_SIZE = Project_Test.TILE_SIZE;
 	private static final double OFF_SET = Project_Test.OFF_SET;
+	private static final double HIGH_PROBE = Project_Test.HIGH_PROBE;
+	private static final double LOW_PROBE = Project_Test.LOW_PROBE;
+	
 
 	private static final double T_x = Project_Test.T_x;
 	private static final double T_y = Project_Test.T_y;
@@ -166,6 +169,21 @@ public class Grabber_Test {
 	public static void lowLevel() {
 		armMotor.setSpeed(ARM_SPEED);
 		armMotor.rotate(LOW_ANGLE);
+		//move forward.////////////////////
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, LOW_PROBE), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, LOW_PROBE), true);
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		///////////////////////////////////
+		openHook();
+		//move backward /////////////////////////
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE), true);
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		/////////////////////////////////////////
+		resetArm();
+		
 	}
 
 	/**
@@ -175,6 +193,21 @@ public class Grabber_Test {
 	public static void highLevel() {
 		armMotor.setSpeed(ARM_SPEED);
 		armMotor.rotate(HIGH_ANGLE);
+		//move forward.////////////////////
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, HIGH_PROBE), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, HIGH_PROBE), true);
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		///////////////////////////////////
+		openHook();
+		//move backward /////////////////////////
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -HIGH_PROBE), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -HIGH_PROBE), true);
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		/////////////////////////////////////////
+		resetArm();
+		
 	}
 
 	/**
@@ -204,7 +237,7 @@ public class Grabber_Test {
 	 * this method is used to reset the arm to the initial position (falling on the
 	 * back support)
 	 */
-	public static void resetArm(EV3LargeRegulatedMotor armMotor) {
+	public static void resetArm() {
 		armMotor.setSpeed(ARM_SPEED);
 		while (armMotor.getTachoCount() != 0) {
 			armMotor.backward();
