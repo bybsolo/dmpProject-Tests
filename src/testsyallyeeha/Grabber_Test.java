@@ -70,19 +70,19 @@ public class Grabber_Test {
 
 		for (int i = 0; i < 4; i++) {	//loop to check 4 corners of the tree
 
-			if (point == 0) {
+			if (point == 0 && (Project_Test.Island_LL_y + 1) != T_y) {
 
 				Navigation_Test.travelTo(X0, Y0, odometer);
 
-			} else if (point == 1) {
+			} else if (point == 1 && (Project_Test.Island_UR_x - 1) != T_x) {
 
 				Navigation_Test.travelTo(X1, Y1, odometer);
 
-			} else if (point == 2) {
+			} else if (point == 2 && (Project_Test.Island_UR_y - 1) != T_y) {
 
 				Navigation_Test.travelTo(X2, Y2, odometer);
 
-			} else if (point == 3) {
+			} else if (point == 3 && (Project_Test.Island_LL_x + 1) != T_x) {
 
 				Navigation_Test.travelTo(X3, Y3, odometer);
 
