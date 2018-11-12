@@ -33,7 +33,7 @@ public class Project_Test {
 	public static final double Island_UR_y = 8; //y coordinate of the upper right corner of the island
 	
 	//The team-specific parameters
-	public static final int Cornor = 1; //the starting corner
+	public static final int corner = 1; //the starting corner
 	public static final double LL_x = 2; //x coordinate of the lower left corner of the home section
 	public static final double LL_y = 0; //y coordinate of the lower left corner of the home section
 	public static final double UR_x = 8; //x coordinate of the upper right corner of the home section
@@ -165,7 +165,7 @@ public class Project_Test {
 			(new Thread() {
 				public void run() {
 					//add method here: test the new filter 
-				
+					Navigation_Test.lineCorrection(odometer);			
 				}
 			}).start();
 		}

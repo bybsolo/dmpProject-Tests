@@ -47,7 +47,6 @@ public class Localizer_Test {
 	
 	private static final double OFF_SET = Project_Test.OFF_SET;
 	private static final double TILE_SIZE = Project_Test.TILE_SIZE;
-	private static final int THRESHOLD = Project_Test.THRESHOLD;
 	private static final double DISTANCE = Project_Test.DISTANCE;
 	private static final double WHEEL_RAD = Project_Test.WHEEL_RAD; 
 	private static final double TRACK = Project_Test.TRACK;  
@@ -250,26 +249,69 @@ public class Localizer_Test {
 	  */
 	public static int lineDetection() {
 		//add a  differential filter
-		int[] readingsLeft = new int[4];
-		int[] readingsRight = new int[4];
-		int[] filterCoeff = {1,1,-1,-1};
+//		int[] readingsLeft = new int[4];
+//		int[] readingsRight = new int[4];
+//		int[] filterCoeff = {1,1,-1,-1};
+//		int differentialLeft = 0;
+//		int differentialRight = 0;
+//		for(int i = 0; i<4; i++) {
+//			myLeftLineSample.fetchSample(sampleLeftLine, 0);
+//			readingsLeft[i] = (int)(sampleLeftLine[0]*1000.0);
+//			myRightLineSample.fetchSample(sampleRightLine, 0);
+//			readingsRight[i] = (int)(sampleRightLine[0]*1000.0);
+//			System.out.println();
+//			System.out.println();
+//			differentialLeft += readingsLeft[i]*filterCoeff[i];
+//			differentialRight += readingsRight[i]*filterCoeff[i];
+//		}
+//		if(differentialLeft >= 40 && differentialRight >= 40) return 3;
+//		else if(differentialLeft >= 40) return 1;
+//		else if(differentialRight >= 40) return 2;
+//		
+//		return 0;
+		
+		///////////////////////////////////////////////////////////////////////////////////
 		int differentialLeft = 0;
 		int differentialRight = 0;
-		for(int i = 0; i<4; i++) {
-			myLeftLineSample.fetchSample(sampleLeftLine, 0);
-			readingsLeft[i] = (int)(sampleLeftLine[0]*1000.0);
-			myRightLineSample.fetchSample(sampleRightLine, 0);
-			readingsRight[i] = (int)(sampleRightLine[0]*1000.0);
-			System.out.println();
-			System.out.println();
-			differentialLeft += readingsLeft[i]*filterCoeff[i];
-			differentialRight += readingsRight[i]*filterCoeff[i];
+		int leftOne;
+		int leftTwo;
+		int rightOne;
+		int rightTwo;
+		myLeftLineSample.fetchSample(sampleLeftLine, 0);
+		leftOne = (int)(sampleLeftLine[0]*1000.0);
+		myRightLineSample.fetchSample(sampleRightLine, 0);
+		rightOne = (int)(sampleRightLine[0]*1000.0);
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	
+		myLeftLineSample.fetchSample(sampleLeftLine, 0);
+		leftTwo = (int)(sampleLeftLine[0]*1000.0);
+		myRightLineSample.fetchSample(sampleRightLine, 0);
+		rightTwo = (int)(sampleRightLine[0]*1000.0);
+		differentialLeft = leftOne - leftTwo;
+		differentialRight = rightOne - rightTwo;
+		
 		if(differentialLeft >= 50 && differentialRight >= 50) return 3;
 		else if(differentialLeft >= 50) return 1;
-		else if(differentialRight >= 50) return 2;
+		else if(differentialRight >= 50) return 2;	
+		else return 0;
 		
-		return 0;
+		////////////////////////////////////////////////////////////////
+		
+//		myLeftLineSample.fetchSample(sampleLeftLine, 0);
+//		int left = (int)(sampleLeftLine[0]*1000.0);
+//		myRightLineSample.fetchSample(sampleRightLine, 0);
+//		int right = (int)(sampleRightLine[0]*1000.0);
+//		
+//		if(left <=300 && right<=300) return 3;
+//		else if(left <= 300) return 1;
+//		else if(right <= 300) return 2;	
+//		else return 0;
+		
 	}
 
 	
@@ -282,32 +324,33 @@ public class Localizer_Test {
 	public static void lightLocalizeLite(Odometer_Test odometer) {
 		leftMotor.setSpeed(75);
 		rightMotor.setSpeed(75);
-		boolean left = false;
-		boolean right = false;
 		leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
 		rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
 		
-		while (left == false && right == false) {
-			leftMotor.forward();
-			rightMotor.forward();
-			if (lineDetection() ==3) {
-				leftMotor.stop();
-				rightMotor.stop();
-				break;
-			}
-			else if (lineDetection()==1) {
-				leftMotor.stop();
-				left = true;
-				//break;
-		
-			}
-			else if (lineDetection()==2) {
-				rightMotor.stop();
-				right = true;
-				
-			}
-		}
-		
+//		boolean left = false;
+//		boolean right = false;
+//		while (left == false && right == false) {
+//			leftMotor.forward();
+//			rightMotor.forward();
+//			if (lineDetection() ==3) {
+//				leftMotor.stop();
+//				rightMotor.stop();
+//				break;
+//			}
+//			else if (lineDetection()==1) {
+//				leftMotor.stop();
+//				left = true;
+//				//break;
+//		
+//			}
+//			else if (lineDetection()==2) {
+//				rightMotor.stop();
+//				right = true;
+//				
+//			}
+//		}
+		Sound.beep();
+		Navigation_Test.adjustment();
 
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
@@ -318,36 +361,37 @@ public class Localizer_Test {
 		leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
 		rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
 		
-		left = false;
-		right = false;
-		
-		while (left == false && right == false) {
-			leftMotor.forward();
-			rightMotor.forward();
-			if (lineDetection() ==3) {
-				leftMotor.stop();
-				rightMotor.stop();
-				break;
-			}
-			
-			else if (lineDetection()==1) {
-				leftMotor.stop();
-				left = true;
-				
-			}
-			else if (lineDetection()==2) {
-				rightMotor.stop();
-				right = true;
-			}
-		}
-
+//		left = false;
+//		right = false;
+//		
+//		while (left == false && right == false) {
+//			leftMotor.forward();
+//			rightMotor.forward();
+//			if (lineDetection() ==3) {
+//				leftMotor.stop();
+//				rightMotor.stop();
+//				break;
+//			}
+//			
+//			else if (lineDetection()==1) {
+//				leftMotor.stop();
+//				left = true;
+//				
+//			}
+//			else if (lineDetection()==2) {
+//				rightMotor.stop();
+//				right = true;
+//			}
+//		}
+		Navigation_Test.adjustment();
+		Sound.beep();
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
 		
-		if(Project_Test.Cornor == 0) odometer.setXYT(TILE_SIZE, TILE_SIZE, 0);
-		if(Project_Test.Cornor == 1) odometer.setXYT(7*TILE_SIZE, TILE_SIZE, 270);
-		if(Project_Test.Cornor == 2) odometer.setXYT(7*TILE_SIZE, 7*TILE_SIZE, 180);
-		if(Project_Test.Cornor == 3) odometer.setXYT(TILE_SIZE, 7*TILE_SIZE, 90);
+		if(Project_Test.corner == 0) odometer.setXYT(TILE_SIZE, TILE_SIZE, 0);
+		if(Project_Test.corner == 1) odometer.setXYT(7*TILE_SIZE, TILE_SIZE, 270);
+		if(Project_Test.corner == 2) odometer.setXYT(7*TILE_SIZE, 7*TILE_SIZE, 180);
+		if(Project_Test.corner == 3) odometer.setXYT(TILE_SIZE, 7*TILE_SIZE, 90);
 		
 	}
 	
