@@ -282,7 +282,7 @@ public class Localizer_Test {
 		myRightLineSample.fetchSample(sampleRightLine, 0);
 		rightOne = (int)(sampleRightLine[0]*1000.0);
 		try {
-			Thread.sleep(20);
+			Thread.sleep(120);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -326,31 +326,9 @@ public class Localizer_Test {
 		rightMotor.setSpeed(75);
 		leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
 		rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
-		
-//		boolean left = false;
-//		boolean right = false;
-//		while (left == false && right == false) {
-//			leftMotor.forward();
-//			rightMotor.forward();
-//			if (lineDetection() ==3) {
-//				leftMotor.stop();
-//				rightMotor.stop();
-//				break;
-//			}
-//			else if (lineDetection()==1) {
-//				leftMotor.stop();
-//				left = true;
-//				//break;
-//		
-//			}
-//			else if (lineDetection()==2) {
-//				rightMotor.stop();
-//				right = true;
-//				
-//			}
-//		}
+
 		Sound.beep();
-		Navigation_Test.adjustment();
+		Navigation_Test.adjustment(odometer);
 
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
@@ -360,30 +338,8 @@ public class Localizer_Test {
 		
 		leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
 		rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
-		
-//		left = false;
-//		right = false;
-//		
-//		while (left == false && right == false) {
-//			leftMotor.forward();
-//			rightMotor.forward();
-//			if (lineDetection() ==3) {
-//				leftMotor.stop();
-//				rightMotor.stop();
-//				break;
-//			}
-//			
-//			else if (lineDetection()==1) {
-//				leftMotor.stop();
-//				left = true;
-//				
-//			}
-//			else if (lineDetection()==2) {
-//				rightMotor.stop();
-//				right = true;
-//			}
-//		}
-		Navigation_Test.adjustment();
+				
+		Navigation_Test.adjustment(odometer);
 		Sound.beep();
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);

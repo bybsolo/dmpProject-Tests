@@ -45,6 +45,9 @@ public class Grabber_Test {
 	private static final double T_y = Project_Test.T_y;
 
 	public static void probe(Odometer_Test odometer) {
+		
+		
+		
 		double[] odometerData = odometer.getXYT();
 		double x = odometerData[0];
 		double y = odometerData[1];
@@ -65,123 +68,106 @@ public class Grabber_Test {
 		double Y3 = T_y;
 
 		int color;
-
-		point = Navigation_Test.closestPoint(X0, Y0, X1, Y1, X2, Y2, X3, Y3, x, y);
-
-		for (int i = 0; i < 4; i++) {	//loop to check 4 corners of the tree
-
-			if (point == 0 && (Project_Test.Island_LL_y + 1) != T_y) {
-
-				Navigation_Test.travelTo(X0, Y0, odometer);
-
-			} else if (point == 1 && (Project_Test.Island_UR_x - 1) != T_x) {
-
-				Navigation_Test.travelTo(X1, Y1, odometer);
-
-			} else if (point == 2 && (Project_Test.Island_UR_y - 1) != T_y) {
-
-				Navigation_Test.travelTo(X2, Y2, odometer);
-
-			} else if (point == 3 && (Project_Test.Island_LL_x + 1) != T_x) {
-
-				Navigation_Test.travelTo(X3, Y3, odometer);
-
-			}
-			point = (point++) % 4;
-
-			odometerData = odometer.getXYT();
-			x = odometerData[0];
-			y = odometerData[1];
-			t = odometerData[2];
-
-			double dAngle = Navigation_Test.getDAngle(T_x, T_y, x, y);
-			Navigation_Test.turnTo(dAngle, t);
-
-			Grabber_Test.highLevel();
-
-			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 20), true);
-			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 20), false);
-
-			color = Color_Test.color();
-
-			if (color == 1 || color == 2 || color == 3 || color == 4) { 	// high level fetching
-				if (color == 1) {
-					Sound.beep();
-				} else if (color == 2) {
-					Sound.beep();
-					Sound.beep();
-				} else if (color == 3) {
-					Sound.beep();
-					Sound.beep();
-					Sound.beep();
-				} else {
-					Sound.beep();
-					Sound.beep();
-					Sound.beep();
-					Sound.beep();
-				}
-				Grabber_Test.openHook();
-
-			} else { 			// low level fetching
-
-				leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 20), true);
-				rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 20), false);
-
-				Grabber_Test.closeHook();
+		
+//		point = Navigation_Test.closestPoint(X0, Y0, X1, Y1, X2, Y2, X3, Y3, x, y);
+//
+////		for (int i = 0; i < 4; i++) {	//loop to check 4 corners of the tree
+//			
+//			System.out.println("point is "+point);
+//
+//			if (point == 0) {
+//
+//				Navigation_Test.travelTo(X0, Y0, odometer);
+//
+//			} else if (point == 1) {
+//
+//				Navigation_Test.travelTo(X1, Y1, odometer);
+//
+//			} else if (point == 2) {
+//
+//				Navigation_Test.travelTo(X2, Y2, odometer);
+//
+//			} else if (point == 3) {
+//
+//				Navigation_Test.travelTo(X3, Y3, odometer);
+//
+//			}
+//			point = (point++) % 4;
+//
+//			odometerData = odometer.getXYT();
+//			x = odometerData[0];
+//			y = odometerData[1];
+//			t = odometerData[2];
+//
+//			//double dAngle = Navigation_Test.getDAngle(x, y, T_x, T_y);
+//			double treeOrientation = 0;
+//			if (point == 1) treeOrientation = 270;
+//			if (point == 2) treeOrientation = 180;
+//			if (point == 3) treeOrientation = 90;
+//			double angle = Navigation_Test.smallAngle(t, treeOrientation);
+//
+//			leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, angle), true);
+//			rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, angle), false);
+			
+			color = Grabber_Test.highLevel();
+			Navigation_Test.lineCorrection(odometer);
+			if (color == 0) {
+				closeHook();
 				Grabber_Test.lowLevel();
-
-				leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 20), true);
-				rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 20), false);
-
-				color = Color_Test.color();
-				if (color == 1 || color == 2 || color == 3 || color == 4) {
-					if (color == 1) {
-						Sound.beep();
-					} else if (color == 2) {
-						Sound.beep();
-						Sound.beep();
-					} else if (color == 3) {
-						Sound.beep();
-						Sound.beep();
-						Sound.beep();
-					} else if (color == 4) {
-						Sound.beep();
-						Sound.beep();
-						Sound.beep();
-						Sound.beep();
-					} else {
-					}
-					Grabber_Test.openHook();
-				}
+				Navigation_Test.lineCorrection(odometer);
 			}
-
-			leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 25), true);
-			rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 25), false);
-
 		}
 
-	}
+//	}
 
 	/**
 	 * This method is used for turning the arm to fetch the rings on the upper level
 	 * of the tree
 	 */
 	public static void lowLevel() {
+		armMotor.setAcceleration(15000);
 		armMotor.setSpeed(ARM_SPEED);
 		armMotor.rotate(LOW_ANGLE);
 		//move forward.////////////////////
+		leftMotor.setSpeed(100);
+		rightMotor.setSpeed(100);
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, LOW_PROBE), true);
-		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, LOW_PROBE), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, LOW_PROBE), false);
+	//	Navigation_Test.lineCorrection();
 		leftMotor.stop(true);
 		rightMotor.stop(false);
 		///////////////////////////////////
+		int color = Color_Test.color();
+
+		if (color == 1 || color == 2 || color == 3 || color == 4) { 	// high level fetching
+			if (color == 1) {
+				Sound.beep();
+			} else if (color == 2) {
+				Sound.beep();
+				Sound.beep();
+			} else if (color == 3) {
+				Sound.beep();
+				Sound.beep();
+				Sound.beep();
+			} else {
+				Sound.beep();
+				Sound.beep();
+				Sound.beep();
+				Sound.beep();
+			}
+
+		}
+		
 		openHook();
 		//move backward /////////////////////////
-		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE), true);
-		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE), true);
+		leftMotor.setSpeed(100);
+		rightMotor.setSpeed(100);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE - 5), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE - 5), false);
 		leftMotor.stop(true);
 		rightMotor.stop(false);
-		/////////////////////////////////////////
+		///////////////////////////////////////
+		armMotor.setAcceleration(3000);
 		resetArm();
 		
 	}
@@ -190,23 +176,52 @@ public class Grabber_Test {
 	 * This method is used for turning the arm to fetch the rings on the lower level
 	 * of the tree
 	 */
-	public static void highLevel() {
+	public static int highLevel() {
 		armMotor.setSpeed(ARM_SPEED);
 		armMotor.rotate(HIGH_ANGLE);
 		//move forward.////////////////////
+		leftMotor.setSpeed(100);
+		rightMotor.setSpeed(100);
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, HIGH_PROBE), true);
-		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, HIGH_PROBE), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, HIGH_PROBE), false);
 		leftMotor.stop(true);
 		rightMotor.stop(false);
 		///////////////////////////////////
+		int color = Color_Test.color();
+
+		if (color == 1 || color == 2 || color == 3 || color == 4) { 	// high level fetching
+			if (color == 1) {
+				Sound.beep();
+				
+			} else if (color == 2) {
+				Sound.beep();
+				Sound.beep();
+			} else if (color == 3) {
+				Sound.beep();
+				Sound.beep();
+				Sound.beep();
+				
+			} else {
+				Sound.beep();
+				Sound.beep();
+				Sound.beep();
+				Sound.beep();
+			}
+
+		}
 		openHook();
+		
 		//move backward /////////////////////////
-		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -HIGH_PROBE), true);
-		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -HIGH_PROBE), true);
+		leftMotor.setSpeed(100);
+		rightMotor.setSpeed(100);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -HIGH_PROBE -5), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -HIGH_PROBE -5), false);
 		leftMotor.stop(true);
 		rightMotor.stop(false);
 		/////////////////////////////////////////
 		resetArm();
+		System.out.println("end highLevel");
+		return color;
 		
 	}
 
