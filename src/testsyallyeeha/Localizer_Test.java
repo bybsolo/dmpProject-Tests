@@ -239,81 +239,6 @@ public class Localizer_Test {
 
 	}
 
-	 /**
-	  * The lineDetection() method is used to determine whether the left or right line detection sensor have picked up the line readings.
-	  * The detection situation is represented as integer values, for easier implementation of the method's returned result.
-	  * If only the left sensor have detected a line, the situation is labeled as 1.
-	  * If only the right sensor have detected a line, the situation is labeled as 1.
-	  * If both sensors have detected a line, the situation is labeled as 3.
-	  * @return the current situation regarding line detection, represented as integers 
-	  */
-	public static int lineDetection() {
-		//add a  differential filter
-//		int[] readingsLeft = new int[4];
-//		int[] readingsRight = new int[4];
-//		int[] filterCoeff = {1,1,-1,-1};
-//		int differentialLeft = 0;
-//		int differentialRight = 0;
-//		for(int i = 0; i<4; i++) {
-//			myLeftLineSample.fetchSample(sampleLeftLine, 0);
-//			readingsLeft[i] = (int)(sampleLeftLine[0]*1000.0);
-//			myRightLineSample.fetchSample(sampleRightLine, 0);
-//			readingsRight[i] = (int)(sampleRightLine[0]*1000.0);
-//			System.out.println();
-//			System.out.println();
-//			differentialLeft += readingsLeft[i]*filterCoeff[i];
-//			differentialRight += readingsRight[i]*filterCoeff[i];
-//		}
-//		if(differentialLeft >= 40 && differentialRight >= 40) return 3;
-//		else if(differentialLeft >= 40) return 1;
-//		else if(differentialRight >= 40) return 2;
-//		
-//		return 0;
-		
-		///////////////////////////////////////////////////////////////////////////////////
-		int differentialLeft = 0;
-		int differentialRight = 0;
-		int leftOne;
-		int leftTwo;
-		int rightOne;
-		int rightTwo;
-		myLeftLineSample.fetchSample(sampleLeftLine, 0);
-		leftOne = (int)(sampleLeftLine[0]*1000.0);
-		myRightLineSample.fetchSample(sampleRightLine, 0);
-		rightOne = (int)(sampleRightLine[0]*1000.0);
-		try {
-			Thread.sleep(120);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
-		myLeftLineSample.fetchSample(sampleLeftLine, 0);
-		leftTwo = (int)(sampleLeftLine[0]*1000.0);
-		myRightLineSample.fetchSample(sampleRightLine, 0);
-		rightTwo = (int)(sampleRightLine[0]*1000.0);
-		differentialLeft = leftOne - leftTwo;
-		differentialRight = rightOne - rightTwo;
-		
-		if(differentialLeft >= 50 && differentialRight >= 50) return 3;
-		else if(differentialLeft >= 50) return 1;
-		else if(differentialRight >= 50) return 2;	
-		else return 0;
-		
-		////////////////////////////////////////////////////////////////
-		
-//		myLeftLineSample.fetchSample(sampleLeftLine, 0);
-//		int left = (int)(sampleLeftLine[0]*1000.0);
-//		myRightLineSample.fetchSample(sampleRightLine, 0);
-//		int right = (int)(sampleRightLine[0]*1000.0);
-//		
-//		if(left <=300 && right<=300) return 3;
-//		else if(left <= 300) return 1;
-//		else if(right <= 300) return 2;	
-//		else return 0;
-		
-	}
-
 	
 	/**
 	 * The lightLocalizerLite() method is simplified version of light localization.
@@ -322,25 +247,33 @@ public class Localizer_Test {
 	 * @param odometer the odometer used by the robot
 	 */
 	public static void lightLocalizeLite(Odometer_Test odometer) {
-		leftMotor.setSpeed(75);
-		rightMotor.setSpeed(75);
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.setAcceleration(3000);
+		}
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+		}
+		
+		leftMotor.setSpeed(150);
+		rightMotor.setSpeed(150);
 		leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
 		rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
-
-		Sound.beep();
+	
 		Navigation_Test.adjustment(odometer);
 
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
 		
-		leftMotor.stop();
-		rightMotor.stop();
+		leftMotor.stop(true);
+		rightMotor.stop(false);
 		
 		leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
 		rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
 				
 		Navigation_Test.adjustment(odometer);
-		Sound.beep();
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
 		
@@ -349,6 +282,10 @@ public class Localizer_Test {
 		if(Project_Test.corner == 2) odometer.setXYT(7*TILE_SIZE, 7*TILE_SIZE, 180);
 		if(Project_Test.corner == 3) odometer.setXYT(TILE_SIZE, 7*TILE_SIZE, 90);
 		
+		//beep three times after localization
+		Sound.beep();
+		Sound.beep();
+		Sound.beep();
 	}
 	
 	

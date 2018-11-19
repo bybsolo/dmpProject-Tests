@@ -64,6 +64,9 @@ public class Color_Test {
 	
 	private static double smallest = 1; //the max possible value for a normalized reading is 1
 	private static double colorThreshold  = 0.2; //all correct readings are smaller than thus thresold, obtained in the color sampling process
+	
+	public static boolean FOUND = false;
+	
 	/**
 	 * calculates the euclidean distance in RGB space
 	 * @param rN normalized red reading
@@ -141,12 +144,15 @@ public class Color_Test {
 				return 1; // return blue
 			if (smallest == dGreen)
 				return 2; // return green
-			if (smallest == dYellow)
+			if (smallest == dYellow) 
 				return 3; // return yellow
-			if (smallest == dOrange)
+			if (smallest == dOrange) {
+				FOUND = false;
 				return 4; // return orange
-			else
+			} else {
+				FOUND = false;
 				return 0;
+			}
 		} else
 			return 0;
 		

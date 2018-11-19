@@ -43,10 +43,10 @@ public class Grabber_Test {
 
 	private static final double T_x = Project_Test.T_x;
 	private static final double T_y = Project_Test.T_y;
+	
+	public static boolean FOUND = Color_Test.FOUND;
 
-	public static void probe(Odometer_Test odometer) {
-		
-		
+	public static void travelToTree(Odometer_Test odometer) {
 		
 		double[] odometerData = odometer.getXYT();
 		double x = odometerData[0];
@@ -69,62 +69,86 @@ public class Grabber_Test {
 
 		int color;
 		
-//		point = Navigation_Test.closestPoint(X0, Y0, X1, Y1, X2, Y2, X3, Y3, x, y);
-//
-////		for (int i = 0; i < 4; i++) {	//loop to check 4 corners of the tree
-//			
-//			System.out.println("point is "+point);
-//
-//			if (point == 0) {
-//
-//				Navigation_Test.travelTo(X0, Y0, odometer);
-//
-//			} else if (point == 1) {
-//
-//				Navigation_Test.travelTo(X1, Y1, odometer);
-//
-//			} else if (point == 2) {
-//
-//				Navigation_Test.travelTo(X2, Y2, odometer);
-//
-//			} else if (point == 3) {
-//
-//				Navigation_Test.travelTo(X3, Y3, odometer);
-//
-//			}
-//			point = (point++) % 4;
-//
-//			odometerData = odometer.getXYT();
-//			x = odometerData[0];
-//			y = odometerData[1];
-//			t = odometerData[2];
-//
-//			//double dAngle = Navigation_Test.getDAngle(x, y, T_x, T_y);
-//			double treeOrientation = 0;
-//			if (point == 1) treeOrientation = 270;
-//			if (point == 2) treeOrientation = 180;
-//			if (point == 3) treeOrientation = 90;
-//			double angle = Navigation_Test.smallAngle(t, treeOrientation);
-//
-//			leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, angle), true);
-//			rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, angle), false);
+		point = Navigation_Test.closestPoint(X0, Y0, X1, Y1, X2, Y2, X3, Y3, x, y);
+		
+		if (point == 0) {
 			
-			color = Grabber_Test.highLevel();
+			Navigation_Test.travelTo(X0, Y0, odometer);
+
+		} else if (point == 1) {
+
+			Navigation_Test.travelTo(X1, Y1, odometer);
+
+		} else if (point == 2) {
+
+			Navigation_Test.travelTo(X2, Y2, odometer);
+
+		} else if (point == 3) {
+
+			Navigation_Test.travelTo(X3, Y3, odometer);
+
+		}
+		
+		//beep three times after arriving at the point 
+		Sound.beep();
+		Sound.beep();
+		Sound.beep();
+		
+		probe(odometer, point);
+		
+		if (!FOUND) {
+		
+			findRoute(point, odometer);
+		
+		}
+	}
+
+	
+	public static void probe(Odometer_Test odometer, int point) {
+		
+		double[] odometerData = odometer.getXYT();
+		double x = odometerData[0];
+		double y = odometerData[1];
+		double t;
+		
+		int color;
+	
+
+		odometerData = odometer.getXYT();
+		x = odometerData[0];
+		y = odometerData[1];
+		t = odometerData[2];
+
+		//double dAngle = Navigation_Test.getDAngle(x, y, T_x, T_y);
+		double treeOrientation = 0;
+		if (point == 1) treeOrientation = 270;
+		if (point == 2) treeOrientation = 180;
+		if (point == 3) treeOrientation = 90;
+		double angle = Navigation_Test.smallAngle(t, treeOrientation);
+
+		leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, angle), true);
+		rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, angle), false);
+		
+		leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 5), true);
+		rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 5), false);
+		
+		Navigation_Test.lineCorrection(odometer);
+		
+		color = Grabber_Test.highLevel();
+		Navigation_Test.lineCorrection(odometer);
+		if (color == 0) {
+			color = Grabber_Test.lowLevel();
 			Navigation_Test.lineCorrection(odometer);
-			if (color == 0) {
-				closeHook();
-				Grabber_Test.lowLevel();
-				Navigation_Test.lineCorrection(odometer);
-			}
 		}
 
-//	}
+	}
 
+	
 	/**
 	 * This method is used for turning the arm to fetch the rings on the upper level
 	 * of the tree
 	 */
-	public static void lowLevel() {
+	public static int lowLevel() {
 		armMotor.setAcceleration(15000);
 		armMotor.setSpeed(ARM_SPEED);
 		armMotor.rotate(LOW_ANGLE);
@@ -142,13 +166,16 @@ public class Grabber_Test {
 		if (color == 1 || color == 2 || color == 3 || color == 4) { 	// high level fetching
 			if (color == 1) {
 				Sound.beep();
+				openHook();
 			} else if (color == 2) {
 				Sound.beep();
 				Sound.beep();
+				openHook();
 			} else if (color == 3) {
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
+				openHook();
 			} else {
 				Sound.beep();
 				Sound.beep();
@@ -158,10 +185,9 @@ public class Grabber_Test {
 
 		}
 		
-		openHook();
 		//move backward /////////////////////////
-		leftMotor.setSpeed(100);
-		rightMotor.setSpeed(100);
+		leftMotor.setSpeed(150);
+		rightMotor.setSpeed(150);
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE - 5), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE - 5), false);
 		leftMotor.stop(true);
@@ -169,6 +195,8 @@ public class Grabber_Test {
 		///////////////////////////////////////
 		armMotor.setAcceleration(3000);
 		resetArm();
+		
+		return color;
 		
 	}
 
@@ -192,28 +220,29 @@ public class Grabber_Test {
 		if (color == 1 || color == 2 || color == 3 || color == 4) { 	// high level fetching
 			if (color == 1) {
 				Sound.beep();
-				
+				openHook();
 			} else if (color == 2) {
 				Sound.beep();
 				Sound.beep();
+				openHook();
 			} else if (color == 3) {
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
-				
+				openHook();
 			} else {
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
+				openHook();
 			}
 
 		}
-		openHook();
 		
 		//move backward /////////////////////////
-		leftMotor.setSpeed(100);
-		rightMotor.setSpeed(100);
+		leftMotor.setSpeed(150);
+		rightMotor.setSpeed(150);
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -HIGH_PROBE -5), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -HIGH_PROBE -5), false);
 		leftMotor.stop(true);
@@ -260,4 +289,170 @@ public class Grabber_Test {
 		armMotor.resetTachoCount();
 	}
 
+	public static void findRoute(int point, Odometer_Test odometer) {
+
+		double T_x = Project_Test.T_x; //x coordinate of the ring tree
+		double T_y = Project_Test.T_y; //y coordinate of the ring tree
+		double Island_LL_y = Project_Test.Island_LL_y;
+		double Island_LL_x = Project_Test.Island_LL_x;
+		double Island_UR_y = Project_Test.Island_UR_y;
+		double Island_UR_x = Project_Test.Island_UR_x;
+		
+		int nextPoint1 = (point + 1)%4; 
+		int nextPoint2 = (point + 2)%4;
+		int nextPoint3 = (point + 3)%4;
+		
+		boolean found;
+		
+		boolean[] availability = {(T_y != 1 && T_y != Island_LL_y), (T_x != 7 && T_x !=Island_UR_x), (T_y != 7 && T_y != Island_UR_y) , (T_x != 1 && T_x != Island_LL_x)};
+		
+		
+		if (!availability[nextPoint1] && !availability[nextPoint2] && !availability[nextPoint3]) {
+			
+			
+			
+		} else if (availability[nextPoint1] && availability[nextPoint2] && availability[nextPoint3]) {
+			
+			
+			treeTravel(point, nextPoint1, odometer);
+			probe(odometer, nextPoint1);
+			 
+			if (!FOUND) {
+				treeTravel(nextPoint1, nextPoint2, odometer);
+				probe(odometer, nextPoint2);
+				
+				if (!FOUND) {
+				
+					treeTravel(nextPoint2, nextPoint3, odometer);
+					probe(odometer, nextPoint3);
+				
+				}
+			}
+			
+		} else if (availability[nextPoint1] && !availability[nextPoint2] && availability[nextPoint3]) {
+			
+			treeTravel(point, nextPoint1, odometer);
+			probe(odometer, nextPoint1);
+			
+			if (!FOUND) {
+			
+				treeTravel(nextPoint1, nextPoint3, odometer);
+				probe(odometer, nextPoint3);
+			}
+			
+		} else if (availability[nextPoint1] && availability[nextPoint2] && !availability[nextPoint3]) {
+			
+			treeTravel(point, nextPoint1, odometer);
+			probe(odometer, nextPoint1);
+			
+			if (!FOUND) {
+			
+				treeTravel(nextPoint1, nextPoint2, odometer);
+				probe(odometer, nextPoint2);
+			}
+			
+		} else if (availability[nextPoint1] && !availability[nextPoint2] && !availability[nextPoint3]) {
+			
+			treeTravel(point, nextPoint1, odometer);
+			probe(odometer, nextPoint1);
+			
+		} else if (!availability[nextPoint1] && availability[nextPoint2] && availability[nextPoint3]) {
+			
+			treeTravel(point, nextPoint3, odometer);
+			probe(odometer, nextPoint3);
+			
+			if (!FOUND) {
+			
+				treeTravel(nextPoint3, nextPoint2, odometer);
+				probe(odometer, nextPoint2);
+			}
+				
+		} else if (!availability[nextPoint1] && !availability[nextPoint2] && availability[nextPoint3]) {
+			
+			treeTravel(point, nextPoint3, odometer);
+			probe(odometer, nextPoint3);
+			
+		}
+		
+		
+	}
+	
+	/**
+	 * This method defines the routine for traveling between the sides, after the avalability of the side is determined 
+	 * @param startPoint the side traveling from
+	 * @param endPoint the side traveling to 
+	 * @param odometer the odometer used by the robot
+	 */
+	public static void treeTravel(int startPoint, int endPoint, Odometer_Test odometer) {
+		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+		}
+		
+		leftMotor.setSpeed(125);
+		rightMotor.setSpeed(125);
+		
+		int direction;
+		
+		if (endPoint == (startPoint + 1)%4 || endPoint == (startPoint - 1)%4) {
+			
+			if (endPoint == (startPoint + 1)%4) {
+				
+				direction = -1;
+				
+			} else {
+				
+				direction = 1;
+				
+			}
+			
+			leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, -direction*90), true);
+			rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, -direction*90), false);
+			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE - 8), true);
+			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE -8), false);
+			Navigation_Test.lineCorrection(odometer);
+			leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, direction*90), true);
+			rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, direction*90), false);
+			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE - 8), true);
+			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE -8), false);
+			Navigation_Test.lineCorrection(odometer);
+			
+			
+		} else if (endPoint == (startPoint + 2)%4 || endPoint == (startPoint - 2)%4) {
+			
+			if (endPoint == (startPoint + 2)%4) {
+				
+				direction = -1;
+				
+			} else {
+				
+				direction = 1;
+				
+			}
+			
+			leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, direction*90), true);
+			rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, direction*90), false);
+			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE - 8), true);
+			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE -8), false);
+			Navigation_Test.lineCorrection(odometer);
+			leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, -direction*90), true);
+			rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, -direction*90), false);
+			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE - 8), true);
+			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE -8), false);
+			Navigation_Test.lineCorrection(odometer);
+			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE - 8), true);
+			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE -8), false);
+			Navigation_Test.lineCorrection(odometer);
+			leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, -direction*90), true);
+			rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, -direction*90), false);
+			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE - 8), true);
+			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE -8), false);
+			Navigation_Test.lineCorrection(odometer);
+			
+		}
+		
+		
+	}
+	
 }
