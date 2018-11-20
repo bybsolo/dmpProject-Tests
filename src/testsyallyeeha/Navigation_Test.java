@@ -85,23 +85,13 @@ public class Navigation_Test {
 		currentX = odometer.getXYT()[0]; // get the current x position in cm
 		currentY = odometer.getXYT()[1]; // get the current y position in cm
 		currentT = odometer.getXYT()[2]; // get the current direction in degrees
-		boolean alongLine = Math.abs(x * TILE_SIZE - currentX) < 2 || Math.abs(y * TILE_SIZE - currentY) < 2;
+		boolean alongLine = Math.abs(x * TILE_SIZE - currentX) < 5 || Math.abs(y * TILE_SIZE - currentY) < 5;
 		if (alongLine == true) {
 			double x1 = x * TILE_SIZE;
 			double y1 = y * TILE_SIZE;
 			double dDistance = Math.sqrt(Math.pow((x1 - currentX), 2) + Math.pow((y1 - currentY), 2));
 			double dAngle = getDAngle(x1, y1, currentX, currentY);
 
-			// reset the motor
-			leftMotor.stop(true);
-			rightMotor.stop(false);
-			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
-				motor.setAcceleration(3000);
-			}
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-			}
 			if(dAngle > 45 & dAngle<=135) dAngle = 90;
 			else if(dAngle > 135 & dAngle<= 225) dAngle = 180;
 			else if(dAngle > 225 & dAngle<=315) dAngle = 270;
@@ -155,17 +145,6 @@ public class Navigation_Test {
 			// calculate the moving distance and turning angle
 			double dDistance = Math.sqrt(Math.pow((x1 - currentX), 2) + Math.pow((y1 - currentY), 2));
 			double dAngle = getDAngle(x1, y1, currentX, currentY);
-
-			// reset the motor
-			leftMotor.stop(true);
-			rightMotor.stop(false);
-			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
-				motor.setAcceleration(3000);
-			}
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-			}
 
 			turnTo(dAngle, currentT); // turn the robot to the direction of the new way point
 
@@ -304,9 +283,6 @@ public class Navigation_Test {
 
 		double pointT0_x, pointT0_y, pointT1_x, pointT1_y, pointT2_x, pointT2_y, pointT3_x, pointT3_y;
 		double tunnelLength;
-		System.out.println(isTunnelVertical);
-		System.out.println("TR is x "+Project_Test.T_x);
-		System.out.println("TR is y"+Project_Test.T_y);
 		
 		if (isTunnelVertical) {
 			tunnelLength = Math.abs(TN_LL_y - TN_UR_y);
@@ -347,6 +323,20 @@ public class Navigation_Test {
 
 		if (pointT == 0) {
 			Navigation_Test.travelTo(pointT0_x, pointT0_y, odometer);
+			
+			//reset motor before rotating
+			leftMotor.stop(true);
+			rightMotor.stop(false);
+			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+				motor.setAcceleration(3000);
+			}
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+			}
+			leftMotor.setSpeed(ROTATE_SPEED);
+			rightMotor.setSpeed(ROTATE_SPEED);
+			
 			if (isTunnelVertical) {
 				currentT = odometer.getXYT()[2];
 				double turn = smallAngle(currentT, 90);
@@ -360,6 +350,20 @@ public class Navigation_Test {
 			}
 		} else if (pointT == 1) {
 			Navigation_Test.travelTo(pointT1_x, pointT1_y, odometer);
+			
+			//reset motor before rotating
+			leftMotor.stop(true);
+			rightMotor.stop(false);
+			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+				motor.setAcceleration(3000);
+			}
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+			}
+			leftMotor.setSpeed(ROTATE_SPEED);
+			rightMotor.setSpeed(ROTATE_SPEED);
+			
 			if (isTunnelVertical) {
 				currentT = odometer.getXYT()[2];
 				double turn = smallAngle(currentT, 270);
@@ -373,6 +377,20 @@ public class Navigation_Test {
 			}
 		} else if (pointT == 2) {
 			Navigation_Test.travelTo(pointT2_x, pointT2_y, odometer);
+			
+			//reset motor before rotating
+			leftMotor.stop(true);
+			rightMotor.stop(false);
+			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+				motor.setAcceleration(3000);
+			}
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+			}
+			leftMotor.setSpeed(ROTATE_SPEED);
+			rightMotor.setSpeed(ROTATE_SPEED);
+			
 			if (isTunnelVertical) {
 				currentT = odometer.getXYT()[2];
 				double turn = smallAngle(currentT, 270);
@@ -386,6 +404,20 @@ public class Navigation_Test {
 			}
 		} else {
 			Navigation_Test.travelTo(pointT3_x, pointT3_y, odometer);
+			
+			//reset motor before rotating
+			leftMotor.stop(true);
+			rightMotor.stop(false);
+			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+				motor.setAcceleration(3000);
+			}
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+			}
+			leftMotor.setSpeed(ROTATE_SPEED);
+			rightMotor.setSpeed(ROTATE_SPEED);
+			
 			if (isTunnelVertical) {
 				currentT = odometer.getXYT()[2];
 				double turn = smallAngle(currentT, 90);
@@ -400,29 +432,49 @@ public class Navigation_Test {
 		}
 
 		/////////////////////////////////////////////////////////////////////
+		//reset motor before traveling
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.setAcceleration(3000);
+		}
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+		}
+		leftMotor.setSpeed(FORWARD_SPEED);
+		rightMotor.setSpeed(FORWARD_SPEED);
+		
 		currentT = odometer.getXYT()[2];
 		if ( (currentT <= 100 && currentT>= 80 && pointT==0)
 				|| ((currentT <= 10 || currentT>= 350) && pointT==1)
 				|| (currentT >= 170 && currentT<=190  && pointT == 3) 
 				|| (currentT >= 260 && currentT<=280  && pointT ==2)) {
-		
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 - 2.5), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 - 2.5), false);
 		}
 		
-		if (((currentT <= 10 || currentT>= 350) && pointT==0)
+		else if (((currentT <= 10 || currentT>= 350) && pointT==0)
 				|| (currentT >= 260 && currentT<=280 && pointT==1)
 				|| (currentT >= 170 && currentT<=190 && pointT==2)
 				|| (currentT >= 80 && currentT<=100 && pointT==3)
 				) {
-			
-			
 			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 + 2.5), true);
 			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 + 2.5), false);
 		}
 		//////////////////////
+		//reset motor before rotating
 		leftMotor.stop(true);
 		rightMotor.stop(false);
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.setAcceleration(3000);
+		}
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+		}
+		leftMotor.setSpeed(ROTATE_SPEED);
+		rightMotor.setSpeed(ROTATE_SPEED);
 
 		currentX = odometer.getXYT()[0];
 		currentY = odometer.getXYT()[1];
@@ -465,7 +517,20 @@ public class Navigation_Test {
 				rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
 			}
 		}
-
+		
+		//reset motor before backing off
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.setAcceleration(3000);
+		}
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+		}
+		leftMotor.setSpeed(FORWARD_SPEED);
+		rightMotor.setSpeed(FORWARD_SPEED);
+		
 		leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 10), true);
 		rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 10), false);
 
@@ -484,11 +549,6 @@ public class Navigation_Test {
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, (tunnelLength + 0.8) * TILE_SIZE), false);
 
 		lineCorrection(odometer);
-
-//		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, (0.8)*TILE_SIZE), true);
-//		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, (0.8)*TILE_SIZE), false);
-//		
-//		lineCorrection(odometer);
 
 	}
 
