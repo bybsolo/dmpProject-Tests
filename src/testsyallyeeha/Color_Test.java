@@ -65,7 +65,7 @@ public class Color_Test {
 	private static double smallest = 1; //the max possible value for a normalized reading is 1
 	private static double colorThreshold  = 0.2; //all correct readings are smaller than thus thresold, obtained in the color sampling process
 	
-	public static boolean FOUND = false;
+//	public static boolean FOUND = false;
 	
 	/**
 	 * calculates the euclidean distance in RGB space
@@ -140,17 +140,21 @@ public class Color_Test {
 		System.out.println(dBlue+ ", "+dGreen+ ", "+ dYellow+", "+ dOrange);
 		//return the TR value
 		if (smallest <= colorThreshold) {
-			if (smallest == dBlue)
+			if (smallest == dBlue) {
+				Grabber_Test.FOUND = true;		///
 				return 1; // return blue
-			if (smallest == dGreen)
+			}
+			if (smallest == dGreen) {
+				Grabber_Test.FOUND = true;		///
 				return 2; // return green
-			if (smallest == dYellow) 
+			}
+			if (smallest == dYellow) {
+				Grabber_Test.FOUND = true;		///
 				return 3; // return yellow
-			if (smallest == dOrange) {
-				FOUND = false;
+			}
+			if (smallest == dOrange) {	
 				return 4; // return orange
 			} else {
-				FOUND = false;
 				return 0;
 			}
 		} else

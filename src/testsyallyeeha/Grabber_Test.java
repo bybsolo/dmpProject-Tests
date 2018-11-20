@@ -45,7 +45,7 @@ public class Grabber_Test {
 	private static final double T_x = Project_Test.T_x;
 	private static final double T_y = Project_Test.T_y;
 	
-	public static boolean FOUND = Color_Test.FOUND;
+	public static boolean FOUND = false;		///
 
 	public static void travelToTree(Odometer_Test odometer) {
 		
@@ -186,7 +186,6 @@ public class Grabber_Test {
 				Sound.beep();
 				openHook();
 			}
-
 		}
 		
 		//reset motor before rotating
@@ -312,16 +311,12 @@ public class Grabber_Test {
 		int nextPoint2 = (point + 2)%4;
 		int nextPoint3 = (point + 3)%4;
 		
-		boolean found;
-		
 		boolean[] availability = {(T_y != 1 && T_y != Island_LL_y), (T_x != 7 && T_x !=Island_UR_x), (T_y != 7 && T_y != Island_UR_y) , (T_x != 1 && T_x != Island_LL_x)};
 		
 		
 		if (!availability[nextPoint1] && !availability[nextPoint2] && !availability[nextPoint3]) {
 			//do nothing
-		} else if (availability[nextPoint1] && availability[nextPoint2] && availability[nextPoint3]) {
-			
-			
+		} else if (availability[nextPoint1] && availability[nextPoint2] && availability[nextPoint3]) {			
 			treeTravel(point, nextPoint1, odometer);
 			probe(odometer, nextPoint1);
 			 
