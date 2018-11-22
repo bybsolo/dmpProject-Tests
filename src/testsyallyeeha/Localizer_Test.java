@@ -127,15 +127,16 @@ public class Localizer_Test {
 	  	    rightMotor.setSpeed(HIGH_SPEED);
 	  	    
 	  	    //calculate the change in angle and then turn to the adjusted orientation
-	  	    //delta is the angle of the real 0 axis when we use initial orientation as 0 axis 
-	  	    double delta = (alpha+beta)/2 -225; 
+	  	    //delta is the angle of the real 90 axis when we use initial orientation as 0 axis 
+	  	    double delta = (alpha+beta)/2 +90 -225; 
 	  	    if (delta<0) delta = 360+delta;
+	  	    else if(delta>=360) delta = delta-360;
 	  	    //turn to the real zero axis
 	  	    leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, (delta-odometer.getXYT()[2])), true);
-		    rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, (delta-odometer.getXYT()[2])), false);	    
+		    rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, (delta -odometer.getXYT()[2])), false);	    
 		    
 		    //correct the odometer orientation to zero
-		    odometer.setTheta(0);
+		    odometer.setTheta(90);
 		}
 		//invoke rising edge if it is facing the wall; use rising edge instead
 		else {
@@ -221,15 +222,16 @@ public class Localizer_Test {
       	    rightMotor.setSpeed(HIGH_SPEED);
       	    
       	    //calculate the change in angle and then turn to the adjusted orientation
-      	    //delta is the angle of the real 0 axis in the system where the original heading was the zero axis.
-      	    double delta = (alpha+beta)/2 -45;
+      	    //delta is the angle of the real 90 axis in the system where the original heading was the zero axis.
+      	    double delta = (alpha+beta)/2 + 90 -45;
       	    if(delta <0) delta = 360+delta;
-      	    //turn to the real 0 axis
+      	    else if(delta>=360) delta = delta-360;
+      	    //turn to the real 90 axis
       	    leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, (delta-odometer.getXYT()[2])), true);
     	    rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, (delta-odometer.getXYT()[2])), false);
     	    
     	    //correct the odometer orientation to zero
-    	    odometer.setTheta(0);
+    	    odometer.setTheta(90);
 
         }
         //if the robot is actually facing away from the wall rather than facing the wall, it will correct itself and use fallingEdge instead
@@ -247,21 +249,18 @@ public class Localizer_Test {
 	 * @param odometer the odometer used by the robot
 	 */
 	public static void lightLocalizeLite(Odometer_Test odometer) {
+		//reset motor before rotating
 		leftMotor.stop(true);
 		rightMotor.stop(false);
 		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
 			motor.setAcceleration(3000);
 		}
 		try {
-			Thread.sleep(500);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 		}
-		
-		leftMotor.setSpeed(150);
-		rightMotor.setSpeed(150);
-		leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
-		rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
-	
+		leftMotor.setSpeed(LOW_SPEED);
+		rightMotor.setSpeed(LOW_SPEED);
 		Navigation_Test.adjustment(odometer);
 
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
@@ -269,11 +268,32 @@ public class Localizer_Test {
 		
 		leftMotor.stop(true);
 		rightMotor.stop(false);
-		
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.setAcceleration(3000);
+		}
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+		}
+		leftMotor.setSpeed(HIGH_SPEED);
+		rightMotor.setSpeed(HIGH_SPEED);
 		leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
 		rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
-				
+		
+		//reset motor before rotating
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.setAcceleration(3000);
+		}
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+		}
+		leftMotor.setSpeed(LOW_SPEED);
+		rightMotor.setSpeed(LOW_SPEED);
 		Navigation_Test.adjustment(odometer);
+		
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, OFF_SET), false);
 		

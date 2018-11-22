@@ -87,13 +87,13 @@ public class Grabber_Test {
 		Sound.beep();
 		Sound.beep();
 		
+		openHook();
 		probe(odometer, point);
+	
 		
-		if (!FOUND) {
+		findRoute(point, odometer);
 		
-			findRoute(point, odometer);
 		
-		}
 	}
 
 	
@@ -156,7 +156,7 @@ public class Grabber_Test {
 		armMotor.setAcceleration(15000);
 		armMotor.setSpeed(ARM_SPEED);
 		armMotor.rotate(LOW_ANGLE);
-
+		closeHook(); //////////////////////////////////////////////////////////////////////////////////
 		leftMotor.setSpeed(PROBE_SPEED);
 		rightMotor.setSpeed(PROBE_SPEED);
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, LOW_PROBE), true);
@@ -169,25 +169,26 @@ public class Grabber_Test {
 		if (color == 1 || color == 2 || color == 3 || color == 4) { 	// high level fetching
 			if (color == 1) {
 				Sound.beep();
-				openHook();
+			
 			} else if (color == 2) {
 				Sound.beep();
 				Sound.beep();
-				openHook();
+			
 			} else if (color == 3) {
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
-				openHook();
+				
 			} else {
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
-				openHook();
-			}
-		}
 		
+			}
+			
+		}
+		openHook(); /////////////////////////////////////////////////////////////////
 		//reset motor before rotating
 		leftMotor.stop(true);
 		rightMotor.stop(false);
@@ -218,7 +219,7 @@ public class Grabber_Test {
 		armMotor.setAcceleration(3000);
 		armMotor.setSpeed(ARM_SPEED);
 		armMotor.rotate(HIGH_ANGLE);
-		//move forward.////////////////////
+		closeHook();/////////////////////////////////////////////////////////////
 		leftMotor.setSpeed(PROBE_SPEED);
 		rightMotor.setSpeed(PROBE_SPEED);
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, HIGH_PROBE), true);
@@ -235,21 +236,23 @@ public class Grabber_Test {
 			} else if (color == 2) {
 				Sound.beep();
 				Sound.beep();
-				openHook();
+				
 			} else if (color == 3) {
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
-				openHook();
+
 			} else {
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
 				Sound.beep();
-				openHook();
+				
 			}
 
 		}
+		
+		openHook(); /////////////////////////////
 		
 		//reset motor before rotating backward
 		leftMotor.stop(true);
@@ -290,8 +293,30 @@ public class Grabber_Test {
 	 * this method is used to unload the ring using the arm motor
 	 */
 	public static void unload() {
+		closeHook();
 		armMotor.setSpeed(ARM_SPEED);
-		armMotor.rotate(UNLOAD_ANGLE);
+		//reset motor before rotating
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.setAcceleration(3000);
+		}
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+		}
+		leftMotor.setSpeed(FORWARD_SPEED);
+		rightMotor.setSpeed(FORWARD_SPEED);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -3), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -3), false);
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		leftMotor.setSpeed(FORWARD_SPEED);
+		rightMotor.setSpeed(FORWARD_SPEED);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5), false);
+		leftMotor.stop(true);
+		rightMotor.stop(false);
 	}
 
 	/**
@@ -329,62 +354,80 @@ public class Grabber_Test {
 			treeTravel(point, nextPoint1, odometer);
 			probe(odometer, nextPoint1);
 			 
-			if (!FOUND) {
+		
 				treeTravel(nextPoint1, nextPoint2, odometer);
 				probe(odometer, nextPoint2);
 				
-				if (!FOUND) {
+			
 				
 					treeTravel(nextPoint2, nextPoint3, odometer);
 					probe(odometer, nextPoint3);
-				
-				}
-			}
+					
+					treeTravel(nextPoint3, point ,odometer);
+		
 			
 		} else if (availability[nextPoint1] && !availability[nextPoint2] && availability[nextPoint3]) {
 			
 			treeTravel(point, nextPoint1, odometer);
 			probe(odometer, nextPoint1);
 			
-			if (!FOUND) {
+	
 			
 				treeTravel(nextPoint1, nextPoint3, odometer);
 				probe(odometer, nextPoint3);
-			}
+				
+				treeTravel(nextPoint3, point ,odometer);
 			
 		} else if (availability[nextPoint1] && availability[nextPoint2] && !availability[nextPoint3]) {
 			
 			treeTravel(point, nextPoint1, odometer);
 			probe(odometer, nextPoint1);
 			
-			if (!FOUND) {
+			
 			
 				treeTravel(nextPoint1, nextPoint2, odometer);
 				probe(odometer, nextPoint2);
-			}
+			
+				treeTravel(nextPoint2, point ,odometer);
 			
 		} else if (availability[nextPoint1] && !availability[nextPoint2] && !availability[nextPoint3]) {
 			
 			treeTravel(point, nextPoint1, odometer);
 			probe(odometer, nextPoint1);
 			
+			treeTravel(nextPoint1, point ,odometer);
 		} else if (!availability[nextPoint1] && availability[nextPoint2] && availability[nextPoint3]) {
 			
 			treeTravel(point, nextPoint3, odometer);
 			probe(odometer, nextPoint3);
 			
-			if (!FOUND) {
+			
 			
 				treeTravel(nextPoint3, nextPoint2, odometer);
 				probe(odometer, nextPoint2);
-			}
+				treeTravel(nextPoint2, point ,odometer);
 				
 		} else if (!availability[nextPoint1] && !availability[nextPoint2] && availability[nextPoint3]) {
 			
 			treeTravel(point, nextPoint3, odometer);
 			probe(odometer, nextPoint3);
 			
+			treeTravel(nextPoint3, point ,odometer);
+			if(point == 0) {
+				odometer.setX((T_x) *TILE_SIZE);
+				odometer.setY((T_y - 1) *TILE_SIZE);
+			} else if(point == 1) {
+				odometer.setX((T_x +1) *TILE_SIZE);
+				odometer.setY((T_y) *TILE_SIZE);
+			} else if(point == 2) {
+				odometer.setX((T_x) *TILE_SIZE);
+				odometer.setY((T_y + 1) *TILE_SIZE);
+			} else if(point == 3) {
+				odometer.setX((T_x -1) *TILE_SIZE);
+				odometer.setY((T_y) *TILE_SIZE);
+			}
 		}
+		
 		
 		
 	}

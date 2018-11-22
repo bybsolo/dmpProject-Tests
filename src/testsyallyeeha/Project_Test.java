@@ -57,9 +57,9 @@ public class Project_Test {
 	
 	//The operating parameters for the navigation and diver system
 	public static final double OFF_SET = 2.5; //this is the offset from the 2 line-detecting light sensors to the wheel base
-	public static final int LOW_SPEED = 65; //this is the slow speed for precise movement 
-	public static final int MEDIUM_SPEED = 150; //this is the medium speed for intermediate movement
-	public static final int HIGH_SPEED = 250; //this is the fast motor speed for less precious, faster movement (long distance travel)
+	public static final int LOW_SPEED = 120; //this is the slow speed for precise movement 
+	public static final int MEDIUM_SPEED = 200; //this is the medium speed for intermediate movement
+	public static final int HIGH_SPEED = 300; //this is the fast motor speed for less precious, faster movement (long distance travel)
 	public static final double WHEEL_RAD = 2.085; //the wheel radius of the wheels
 	public static final double TRACK = 14.42; //the wheel base of the robot
 	public static final double TILE_SIZE = 30.48; //the tile length of the grid
@@ -167,7 +167,21 @@ public class Project_Test {
 			(new Thread() {
 				public void run() {
 					//add method : 
-
+					Localizer_Test.fallingEdge(odometer);
+					Localizer_Test.lightLocalizeLite(odometer);
+					Sound.beep();
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Navigation_Test.tunnelTravel(odometer);
+					System.out.println("x is  " + odometer.getXYT()[0] + "  y is " + odometer.getXYT()[1] + "  T is " +odometer.getXYT()[2]);
+					Grabber_Test.travelToTree(odometer);
+					
+					Navigation_Test.tunnelTravel(odometer);
+					Navigation_Test.cornerTravel(odometer);
 				
 				}
 			}).start();
