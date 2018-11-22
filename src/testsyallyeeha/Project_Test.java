@@ -131,25 +131,72 @@ public class Project_Test {
 		if(buttonChoice==Button.ID_UP) {
 			(new Thread() {
 				public void run() {
-					//add method : driver wheel radius test
-					leftMotor.stop(true);
-					rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), false);
+					//add method : open hook angle test -- find the right angle at which we open the hook.
+					
+					//trial 1
+					hookMotor.rotate(10);
 					try {
-						Thread.sleep(5000);
+						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					leftMotor.stop(true);
-					rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 180), false);
+					hookMotor.rotate(-10);
 					try {
-						Thread.sleep(5000);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					leftMotor.stop(true);
-					rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+					
+					//trial 2
+					hookMotor.rotate(15);
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					hookMotor.rotate(-15);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					//trial 3
+					hookMotor.rotate(20);
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					hookMotor.rotate(-20);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					//trial 4
+					hookMotor.rotate(25);
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					hookMotor.rotate(-25);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				}
 			}).start();
 		}
