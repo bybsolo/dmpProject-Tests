@@ -49,22 +49,22 @@ public class Project_Test {
 	
 	//The operating parameters for arm and hook (grabbing mechanism)
 	public static final int HOOK_SPEED = 10; //this is the speed used for the motor 
-	public static final int ARM_SPEED = 60; //this is the speed for the arm for the arm motor 
-	public static final int HOOK_ANGLE = 50; //this is the angle which the hook will open/close	
-	public static final int LOW_ANGLE = 160; //the angle the arm motor needs to turn to reach lowly-hanged rings, with respect to the initial position 
+	public static final int ARM_SPEED = 80; //this is the speed for the arm for the arm motor 
+	public static final int HOOK_ANGLE = 23; //this is the angle which the hook will open/close	
+	public static final int LOW_ANGLE = 98; //the angle the arm motor needs to turn to reach lowly-hanged rings, with respect to the initial position 
 	public static final int HIGH_ANGLE = 40; //the angle the arm motor needs to turn to reach highly-hanged rings, with respect to the initial position 
 	public static final int UNLOAD_ANGLE = 110; //the angle the arm motor needs to turn to unload the ring(s), with respect to the initial position 
 	
 	//The operating parameters for the navigation and diver system
 	public static final double OFF_SET = 2.5; //this is the offset from the 2 line-detecting light sensors to the wheel base
-	public static final int LOW_SPEED = 120; //this is the slow speed for precise movement 
-	public static final int MEDIUM_SPEED = 200; //this is the medium speed for intermediate movement
-	public static final int HIGH_SPEED = 300; //this is the fast motor speed for less precious, faster movement (long distance travel)
+	public static final int LOW_SPEED = 125; //this is the slow speed for precise movement 
+	public static final int MEDIUM_SPEED = 250; //this is the medium speed for intermediate movement
+	public static final int HIGH_SPEED = 350; //this is the fast motor speed for less precious, faster movement (long distance travel)
 	public static final double WHEEL_RAD = 2.085; //the wheel radius of the wheels
-	public static final double TRACK = 14.42; //the wheel base of the robot
+	public static final double TRACK = 14.6; //the wheel base of the robot
 	public static final double TILE_SIZE = 30.48; //the tile length of the grid
-	public static final double HIGH_PROBE = 14;
-	public static final double LOW_PROBE = 4.5;
+	public static final double HIGH_PROBE = 5.5;
+	public static final double LOW_PROBE = 6.5;
 	public static final int DISTANCE = 45; //distance from the wall used by the ultrasonic sensor during the ultrasonic localization 
 	
 	//create port and object for the motors (4 in total)
@@ -131,72 +131,24 @@ public class Project_Test {
 		if(buttonChoice==Button.ID_UP) {
 			(new Thread() {
 				public void run() {
-					//add method : open hook angle test -- find the right angle at which we open the hook.
+					armMotor.setAcceleration(3000);
+					armMotor.setSpeed(120);
 					
-					//trial 1
-					hookMotor.rotate(10);
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					hookMotor.rotate(-10);
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					armMotor.rotate(98);
 					
-					//trial 2
-					hookMotor.rotate(15);
 					try {
-						Thread.sleep(500);
+						Thread.sleep(3000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					hookMotor.rotate(-15);
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					armMotor.setAcceleration(3000);
+					armMotor.setSpeed(120);
+					while (armMotor.getTachoCount() != 0) {
+						armMotor.backward();
 					}
+					armMotor.resetTachoCount();
 					
-					//trial 3
-					hookMotor.rotate(20);
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					hookMotor.rotate(-20);
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					//trial 4
-					hookMotor.rotate(25);
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					hookMotor.rotate(-25);
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
 				}
 			}).start();
 		}
@@ -238,7 +190,7 @@ public class Project_Test {
 			(new Thread() {
 				public void run() {
 					//add method here: test the new filter 
-			
+					Testers_Test.tree(odometer);
 				}
 			}).start();
 		}

@@ -136,14 +136,13 @@ public class Grabber_Test {
 		leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 5), true);
 		rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 5), false);
 		
-		Navigation_Test.lineCorrection(odometer);
 		
+		Navigation_Test.lineCorrection(odometer);
 		color = Grabber_Test.highLevel();
 		Navigation_Test.lineCorrection(odometer);
-		if (color == 0) {
+			
 			color = Grabber_Test.lowLevel();
 			Navigation_Test.lineCorrection(odometer);
-		}
 
 	}
 
@@ -153,16 +152,30 @@ public class Grabber_Test {
 	 * of the tree
 	 */
 	public static int lowLevel() {
-		armMotor.setAcceleration(15000);
+		armMotor.setAcceleration(3000);
 		armMotor.setSpeed(ARM_SPEED);
+
+
+		leftMotor.setSpeed(ROTATE_SPEED);
+		rightMotor.setSpeed(ROTATE_SPEED);
+		leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 10), true);
+		rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 10), false);
 		armMotor.rotate(LOW_ANGLE);
 		closeHook(); //////////////////////////////////////////////////////////////////////////////////
+		//reset motor before rotating
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.setAcceleration(3000);
+		}
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+		}
 		leftMotor.setSpeed(PROBE_SPEED);
 		rightMotor.setSpeed(PROBE_SPEED);
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, LOW_PROBE), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, LOW_PROBE), false);
-		leftMotor.stop(true);
-		rightMotor.stop(false);
 		///////////////////////////////////
 		int color = Color_Test.color();
 
@@ -201,11 +214,25 @@ public class Grabber_Test {
 		}
 		leftMotor.setSpeed(ROTATE_SPEED);
 		rightMotor.setSpeed(ROTATE_SPEED);
-
-		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE - 5), true);
-		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE - 5), false);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -LOW_PROBE), false);
 
 		resetArm();
+		
+		//reset motor before rotating
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.setAcceleration(3000);
+		}
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+		}
+		leftMotor.setSpeed(ROTATE_SPEED);
+		rightMotor.setSpeed(ROTATE_SPEED);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, LOW_PROBE-1), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, LOW_PROBE-1), false);
 		
 		return color;
 		
@@ -216,9 +243,12 @@ public class Grabber_Test {
 	 * of the tree
 	 */
 	public static int highLevel() {
+		
+		
 		armMotor.setAcceleration(3000);
 		armMotor.setSpeed(ARM_SPEED);
 		armMotor.rotate(HIGH_ANGLE);
+		
 		closeHook();/////////////////////////////////////////////////////////////
 		leftMotor.setSpeed(PROBE_SPEED);
 		rightMotor.setSpeed(PROBE_SPEED);
@@ -232,7 +262,6 @@ public class Grabber_Test {
 		if (color == 1 || color == 2 || color == 3 || color == 4) { 	// high level fetching
 			if (color == 1) {
 				Sound.beep();
-				openHook();
 			} else if (color == 2) {
 				Sound.beep();
 				Sound.beep();
@@ -278,6 +307,7 @@ public class Grabber_Test {
 	 * This method is used for opening the a the hook to fetch the ring
 	 */
 	public static void openHook() {
+		System.out.println("open hook");
 		hookMotor.rotate(HOOK_ANGLE);
 	}
 
@@ -286,6 +316,7 @@ public class Grabber_Test {
 	 * the rings
 	 */
 	public static void closeHook() {
+		System.out.println("close hook");
 		hookMotor.rotate(-HOOK_ANGLE);
 	}
 
@@ -293,8 +324,7 @@ public class Grabber_Test {
 	 * this method is used to unload the ring using the arm motor
 	 */
 	public static void unload() {
-		closeHook();
-		armMotor.setSpeed(ARM_SPEED);
+		
 		//reset motor before rotating
 		leftMotor.stop(true);
 		rightMotor.stop(false);
@@ -307,10 +337,19 @@ public class Grabber_Test {
 		}
 		leftMotor.setSpeed(FORWARD_SPEED);
 		rightMotor.setSpeed(FORWARD_SPEED);
-		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -3), true);
-		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -3), false);
+		closeHook();
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -5), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -5), false);
+		//reset motor before rotating
 		leftMotor.stop(true);
 		rightMotor.stop(false);
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.setAcceleration(3000);
+		}
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+		}
 		leftMotor.setSpeed(FORWARD_SPEED);
 		rightMotor.setSpeed(FORWARD_SPEED);
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5), true);
@@ -324,7 +363,7 @@ public class Grabber_Test {
 	 * back support)
 	 */
 	public static void resetArm() {
-		armMotor.setAcceleration(3000);
+		armMotor.setAcceleration(15000);
 		armMotor.setSpeed(ARM_SPEED);
 		while (armMotor.getTachoCount() != 0) {
 			armMotor.backward();
@@ -413,21 +452,22 @@ public class Grabber_Test {
 			probe(odometer, nextPoint3);
 			
 			treeTravel(nextPoint3, point ,odometer);
-			if(point == 0) {
-				odometer.setX((T_x) *TILE_SIZE);
-				odometer.setY((T_y - 1) *TILE_SIZE);
-			} else if(point == 1) {
-				odometer.setX((T_x +1) *TILE_SIZE);
-				odometer.setY((T_y) *TILE_SIZE);
-			} else if(point == 2) {
-				odometer.setX((T_x) *TILE_SIZE);
-				odometer.setY((T_y + 1) *TILE_SIZE);
-			} else if(point == 3) {
-				odometer.setX((T_x -1) *TILE_SIZE);
-				odometer.setY((T_y) *TILE_SIZE);
-			}
+
 		}
 		
+		if(point == 0) {
+			odometer.setX((T_x) *TILE_SIZE);
+			odometer.setY((T_y - 1) *TILE_SIZE);
+		} else if(point == 1) {
+			odometer.setX((T_x +1) *TILE_SIZE);
+			odometer.setY((T_y) *TILE_SIZE);
+		} else if(point == 2) {
+			odometer.setX((T_x) *TILE_SIZE);
+			odometer.setY((T_y + 1) *TILE_SIZE);
+		} else if(point == 3) {
+			odometer.setX((T_x -1) *TILE_SIZE);
+			odometer.setY((T_y) *TILE_SIZE);
+		}
 		
 		
 	}

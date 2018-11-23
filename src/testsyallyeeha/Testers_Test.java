@@ -108,14 +108,52 @@ public class Testers_Test {
 		}
 		
 		//move the robot forward until the Y asis is detected
-		leftMotor.setSpeed(150);
-		rightMotor.setSpeed(150);
+		leftMotor.setSpeed(200);
+		rightMotor.setSpeed(200);
 		leftMotor.rotate(Navigation_Test.convertAngle(Project_Test.WHEEL_RAD, Project_Test.TRACK, 360), true);
 		rightMotor.rotate(-Navigation_Test.convertAngle(Project_Test.WHEEL_RAD, Project_Test.TRACK, 360), false);
 	}
 	
 	
+	public static void tree(Odometer_Test odometer) {		
+		int color;
+		Grabber_Test.openHook();
+		Navigation_Test.lineCorrection(odometer);
+		color = Grabber_Test.highLevel();
+		Navigation_Test.lineCorrection(odometer);
+			
+		color = Grabber_Test.lowLevel();
+		Navigation_Test.lineCorrection(odometer);
+		
+		
+		
+	}
 	
+	
+	public static void hookTest() {
+		hookMotor.rotate(25);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		hookMotor.rotate(-25);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		hookMotor.rotate(25);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		hookMotor.rotate(-25);
+	}
 	
 	public static void line() {
 //		System.out.println("start line sampling");
