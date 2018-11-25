@@ -52,7 +52,7 @@ public class Localizer_Test {
 	private static final double TRACK = Project_Test.TRACK;  
 	private static final int LOW_SPEED = Project_Test.LOW_SPEED; //this is the slow speed for precise movement 
 	private static final int MEDIUM_SPEED = Project_Test.MEDIUM_SPEED; //this is the medium speed for intermediate movement
-	private static final int HIGH_SPEED = Project_Test.HIGH_SPEED; //this is the fast motor speed for less precious, faster movement (long distance travel)
+	private static final int HIGH_SPEED = Project_Test.HIGH_SPEED -50; //this is the fast motor speed for less precious, faster movement (long distance travel)
 
 	
 	
@@ -75,6 +75,16 @@ public class Localizer_Test {
 		    //turn clockwise to find the back wall and the corresponding angle alpha
       	    leftMotor.stop();
       	    rightMotor.stop();
+	        //reset the motor
+		  	for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
+		  	      motor.stop();
+			      motor.setAcceleration(3000);
+	  		    }
+	  		// Sleep for 1 second
+	  	    try {
+		  	      Thread.sleep(200);
+		    } catch (InterruptedException e) {      // There is nothing to be done here
+		  	}    
 	  	    leftMotor.setSpeed(HIGH_SPEED); 
 	  	    rightMotor.setSpeed(HIGH_SPEED);
 	  	    
@@ -97,8 +107,17 @@ public class Localizer_Test {
 	  	    rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), false);
 	  	    
 	  	    //turn counter-clockwise to find the left wall and the corresponding angle beta
-      	    leftMotor.stop();
-      	    rightMotor.stop();
+      	    leftMotor.stop(true);
+      	    rightMotor.stop(false);
+		  	for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
+		  	      motor.stop();
+			      motor.setAcceleration(3000);
+	  		    }
+	  		// Sleep for 1 second
+	  	    try {
+		  	      Thread.sleep(200);
+		    } catch (InterruptedException e) {     
+		  	}  
 	  	    leftMotor.setSpeed(HIGH_SPEED); 
 	  	    rightMotor.setSpeed(HIGH_SPEED);
 	  	    
@@ -121,8 +140,18 @@ public class Localizer_Test {
 	  	    leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), true);
 	  	    rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), false);
 	  	    
-      	    leftMotor.stop();
-      	    rightMotor.stop();
+      	    leftMotor.stop(true);
+      	    rightMotor.stop(false);
+	  	    //reset the motor
+		  	for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
+		  	      motor.stop();
+			      motor.setAcceleration(3000);
+	  		    }
+	  		// Sleep for 1 second
+	  	    try {
+		  	      Thread.sleep(200);
+		    } catch (InterruptedException e) {      
+		  	}
 	  	    leftMotor.setSpeed(HIGH_SPEED); 
 	  	    rightMotor.setSpeed(HIGH_SPEED);
 	  	    
@@ -167,6 +196,16 @@ public class Localizer_Test {
     	    //turn clockwise to find the left wall and the corresponding angle beta
       	    leftMotor.stop();
       	    rightMotor.stop();
+	  	    //reset the motor
+		  	for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
+		  	      motor.stop();
+			      motor.setAcceleration(3000);
+	  		    }
+	  		// Sleep for 1 second
+	  	    try {
+		  	      Thread.sleep(200);
+		    } catch (InterruptedException e) {      
+		  	}
     	    leftMotor.setSpeed(HIGH_SPEED); 
       	    rightMotor.setSpeed(HIGH_SPEED);
       	    
@@ -191,8 +230,18 @@ public class Localizer_Test {
       	    rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), false);
       	    
       	    //turn counter-clockwise to find the back wall and the corresponding angle alpha
-      	    leftMotor.stop();
-      	    rightMotor.stop();	    
+      	    leftMotor.stop(true);
+      	    rightMotor.stop(false);	
+	  	    //reset the motor
+		  	for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
+		  	      motor.stop();
+			      motor.setAcceleration(3000);
+	  		    }
+	  		// Sleep for 1 second
+	  	    try {
+		  	      Thread.sleep(200);
+		    } catch (InterruptedException e) {      
+		  	}
       	    leftMotor.setSpeed(HIGH_SPEED); 
       	    rightMotor.setSpeed(HIGH_SPEED);
     	    
@@ -216,8 +265,18 @@ public class Localizer_Test {
       	    leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), true);
       	    rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), false);
       	    
-      	    leftMotor.stop();
-      	    rightMotor.stop();
+      	    leftMotor.stop(true);
+      	    rightMotor.stop(false);
+	  	    //reset the motor
+		  	for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
+		  	      motor.stop();
+			      motor.setAcceleration(3000);
+	  		    }
+	  		// Sleep for 1 second
+	  	    try {
+		  	      Thread.sleep(200);
+		    } catch (InterruptedException e) {      
+		  	}
       	    leftMotor.setSpeed(HIGH_SPEED); 
       	    rightMotor.setSpeed(HIGH_SPEED);
       	    

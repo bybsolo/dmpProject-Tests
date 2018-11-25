@@ -545,6 +545,10 @@ public class Navigation_Test {
 		leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 10), true);
 		rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 10), false);
 
+		armMotor.setAcceleration(1000);
+		armMotor.setSpeed(100);
+		armMotor.rotate(80);
+		
 		lineCorrection(odometer);
 
 		leftMotor.setSpeed(FORWARD_SPEED);
@@ -553,12 +557,14 @@ public class Navigation_Test {
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, (0.8) * TILE_SIZE), false);
 
 		lineCorrection(odometer);
-
+		
 		leftMotor.setSpeed(FORWARD_SPEED);
 		rightMotor.setSpeed(FORWARD_SPEED);
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, (tunnelLength + 0.8) * TILE_SIZE), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, (tunnelLength + 0.8) * TILE_SIZE), false);
 
+		Grabber_Test.resetArm();
+		
 		lineCorrection(odometer);
 
 	}
@@ -571,92 +577,102 @@ public static void cornerTravel(Odometer_Test odometer) {
 		currentT = odometer.getXYT()[2];
 		double turnAngle;
 		if (corner == 0) {
-			double dAngle = getDAngle(1*TILE_SIZE, 1*TILE_SIZE, currentX, currentY);
-			double dDistance = Math.sqrt(Math.pow((1*TILE_SIZE - currentX), 2) + Math.pow((1*TILE_SIZE - currentY), 2));
-			turnTo(dAngle, currentT);
-			// reset the motor
-			leftMotor.stop(true);
-			rightMotor.stop(false);
-			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
-				motor.setAcceleration(3000);
-			}
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-			}
-
-			leftMotor.setSpeed(FORWARD_SPEED);
-			rightMotor.setSpeed(FORWARD_SPEED);
-			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), true);
-			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), false);
-			currentT = odometer.getXYT()[2];
-			turnAngle = smallAngle(currentT, 135);
+//			double dAngle = getDAngle(1*TILE_SIZE, 1*TILE_SIZE, currentX, currentY);
+//			double dDistance =  -5 + Math.sqrt(Math.pow((1*TILE_SIZE - currentX), 2) + Math.pow((1*TILE_SIZE - currentY), 2));
+//			turnTo(dAngle, currentT);
+//			// reset the motor
+//			leftMotor.stop(true);
+//			rightMotor.stop(false);
+//			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+//				motor.setAcceleration(3000);
+//			}
+//			try {
+//				Thread.sleep(200);
+//			} catch (InterruptedException e) {
+//			}
+//
+//			leftMotor.setSpeed(FORWARD_SPEED);
+//			rightMotor.setSpeed(FORWARD_SPEED);
+//			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), true);
+//			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), false);
+			
+			travelTo(1,1, odometer);/////////////////
+			
+			currentT = odometer.getXYT()[2];			
+			turnAngle = smallAngle(currentT, 225);
 			
 		} else if (corner == 1) {
-			double dAngle = getDAngle(7*TILE_SIZE, 1*TILE_SIZE, currentX, currentY);
-			double dDistance = Math.sqrt(Math.pow((7*TILE_SIZE - currentX), 2) + Math.pow((1*TILE_SIZE - currentY), 2));
-			turnTo(dAngle, currentT);
-			//reset Motor
-			leftMotor.stop(true);
-			rightMotor.stop(false);
-			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
-				motor.setAcceleration(3000);
-			}
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-			}
-
-			leftMotor.setSpeed(FORWARD_SPEED);
-			rightMotor.setSpeed(FORWARD_SPEED);
-			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), true);
-			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), false);
+//			double dAngle = getDAngle(7*TILE_SIZE, 1*TILE_SIZE, currentX, currentY);
+//			double dDistance = -5 + Math.sqrt(Math.pow((7*TILE_SIZE - currentX), 2) + Math.pow((1*TILE_SIZE - currentY), 2));
+//			turnTo(dAngle, currentT);
+//			//reset Motor
+//			leftMotor.stop(true);
+//			rightMotor.stop(false);
+//			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+//				motor.setAcceleration(3000);
+//			}
+//			try {
+//				Thread.sleep(200);
+//			} catch (InterruptedException e) {
+//			}
+//
+//			leftMotor.setSpeed(FORWARD_SPEED);
+//			rightMotor.setSpeed(FORWARD_SPEED);
+//			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), true);
+//			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), false);
+		
+			travelTo(7,1, odometer);/////////////////
+			
 			currentT = odometer.getXYT()[2];
 			turnAngle = smallAngle(currentT, 135);
 		} else if (corner == 2) {
-			double dAngle = getDAngle(7*TILE_SIZE, 7*TILE_SIZE, currentX, currentY);
-			double dDistance = Math.sqrt(Math.pow((7*TILE_SIZE - currentX), 2) + Math.pow((7*TILE_SIZE - currentY), 2));
-			turnTo(dAngle, currentT);
-			//reset Motor
-			leftMotor.stop(true);
-			rightMotor.stop(false);
-			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
-				motor.setAcceleration(3000);
-			}
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-			}
-
-			leftMotor.setSpeed(FORWARD_SPEED);
-			rightMotor.setSpeed(FORWARD_SPEED);
-			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), true);
-			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), false);
+//			double dAngle = getDAngle(7*TILE_SIZE, 7*TILE_SIZE, currentX, currentY);
+//			double dDistance =  -5 + Math.sqrt(Math.pow((7*TILE_SIZE - currentX), 2) + Math.pow((7*TILE_SIZE - currentY), 2));
+//			turnTo(dAngle, currentT);
+//			//reset Motor
+//			leftMotor.stop(true);
+//			rightMotor.stop(false);
+//			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+//				motor.setAcceleration(3000);
+//			}
+//			try {
+//				Thread.sleep(200);
+//			} catch (InterruptedException e) {
+//			}
+//
+//			leftMotor.setSpeed(FORWARD_SPEED);
+//			rightMotor.setSpeed(FORWARD_SPEED);
+//			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), true);
+//			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), false);
+			
+			travelTo(7,7, odometer);/////////////////
+			
 			currentT = odometer.getXYT()[2];
-			currentT = odometer.getXYT()[2];
-			turnAngle = smallAngle(currentT, 135);
+			turnAngle = smallAngle(currentT, 45);
 		} else {		
-			double dAngle = getDAngle(1*TILE_SIZE, 7*TILE_SIZE, currentX, currentY);
-			double dDistance = Math.sqrt(Math.pow((1*TILE_SIZE - currentX), 2) + Math.pow((7*TILE_SIZE - currentY), 2));
-			turnTo(dAngle, currentT);
-			//reset Motor
-			leftMotor.stop(true);
-			rightMotor.stop(false);
-			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
-				motor.setAcceleration(3000);
-			}
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-			}
-
-			leftMotor.setSpeed(FORWARD_SPEED);
-			rightMotor.setSpeed(FORWARD_SPEED);
-			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), true);
-			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), false);
+//			double dAngle = getDAngle(1*TILE_SIZE, 7*TILE_SIZE, currentX, currentY);
+//			double dDistance =  -5 + Math.sqrt(Math.pow((1*TILE_SIZE - currentX), 2) + Math.pow((7*TILE_SIZE - currentY), 2));
+//			turnTo(dAngle, currentT);
+//			//reset Motor
+//			leftMotor.stop(true);
+//			rightMotor.stop(false);
+//			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+//				motor.setAcceleration(3000);
+//			}
+//			try {
+//				Thread.sleep(200);
+//			} catch (InterruptedException e) {
+//			}
+//
+//			leftMotor.setSpeed(FORWARD_SPEED);
+//			rightMotor.setSpeed(FORWARD_SPEED);
+//			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), true);
+//			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, dDistance), false);
+			
+			travelTo(1,7, odometer);/////////////////
+			
 			currentT = odometer.getXYT()[2];
-			currentT = odometer.getXYT()[2];
-			turnAngle = smallAngle(currentT, 135);
+			turnAngle = smallAngle(currentT, 315);
 		}
 		// reset the motor
 		leftMotor.stop(true);
@@ -899,11 +915,6 @@ public static void cornerTravel(Odometer_Test odometer) {
 		boolean left = false;
 		boolean right = false;
 		boolean firstStop = true;
-//		boolean leftMissed = false;
-//		boolean rightMissed = false;
-//		double firstT = odometer.getXYT()[2];
-//		double secondT;
-//		double delT;
 
 		while (left == false || right == false) {
 			int lineStatus = lineDetection();
@@ -931,14 +942,7 @@ public static void cornerTravel(Odometer_Test odometer) {
 						firstStop = false;
 					} else {
 						leftMotor.stop(true);
-//						secondT = odometer.getXYT()[2]; //
-//					delT = (firstT>=secondT? firstT-secondT : firstT-secondT +360); //4
-//					System.out.println(delT);
-//					if(delT>=45 ) { //
-//						rightMissed = true;//
-//						break; //
-//					}//
-						// what is the logoc here
+
 
 					}
 					left = true;
@@ -951,12 +955,7 @@ public static void cornerTravel(Odometer_Test odometer) {
 						firstStop = false;
 					} else {
 						rightMotor.stop(true);
-//						secondT = odometer.getXYT()[2];
-//						delT = (secondT >= firstT ? secondT - firstT : secondT - firstT + 360);
-//						if (delT >= 45) {
-//							leftMissed = true;
-//							break;
-//						}
+
 					}
 					right = true;
 				} 
@@ -970,13 +969,6 @@ public static void cornerTravel(Odometer_Test odometer) {
 					}
 				}
 
-//				if (leftMissed == true) {
-//					rightMotor.stop(true);
-//					leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
-//				} else if (rightMissed == true) {
-//					leftMotor.stop(true);
-//					rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
-//				}
 			}
 
 	}

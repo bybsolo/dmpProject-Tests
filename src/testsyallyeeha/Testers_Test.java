@@ -1,5 +1,6 @@
 package testsyallyeeha;
 
+import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -114,6 +115,46 @@ public class Testers_Test {
 		rightMotor.rotate(-Navigation_Test.convertAngle(Project_Test.WHEEL_RAD, Project_Test.TRACK, 360), false);
 	}
 	
+	public static void falseColor() {
+		
+		for (int i=0; i < 30; i++) {
+		int color = Color_Test.color();
+		System.out.println(color);
+		if (color == 1 || color == 2 || color == 3 || color == 4) { // high level fetching
+			if (color == 1) {
+				Sound.beep();
+			
+
+			} else if (color == 2) {
+				Sound.beep();
+				Sound.beep();
+		
+
+			} else if (color == 3) {
+				Sound.beep();
+				Sound.beep();
+				Sound.beep();
+			
+
+			} else {
+				Sound.beep();
+				Sound.beep();
+				Sound.beep();
+				Sound.beep();
+		
+			}
+		}
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		
+		}
+		System.out.println("DONE");
+	}
 	
 	public static void tree(Odometer_Test odometer) {		
 		int color;
