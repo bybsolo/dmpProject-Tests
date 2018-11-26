@@ -103,6 +103,17 @@ public class Localizer_Test {
 	  	    }	  
 	  	    
 	  	    //turn the robot counter-clockwise out of the alpha detection zone
+      	    leftMotor.stop(true);
+      	    rightMotor.stop(false);
+		  	for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
+		  	      motor.stop();
+			      motor.setAcceleration(3000);
+	  		    }
+	  		// Sleep for 1 second
+	  	    try {
+		  	      Thread.sleep(200);
+		    } catch (InterruptedException e) {     
+		  	}  
 	  	    leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), true);
 	  	    rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), false);
 	  	    
@@ -137,6 +148,17 @@ public class Localizer_Test {
 	  	    }	  
 	  	    
 	  	    //move the sensor away from the beta detection zone
+      	    leftMotor.stop(true);
+      	    rightMotor.stop(false);
+		  	for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
+		  	      motor.stop();
+			      motor.setAcceleration(3000);
+	  		    }
+	  		// Sleep for 1 second
+	  	    try {
+		  	      Thread.sleep(200);
+		    } catch (InterruptedException e) {     
+		  	}  
 	  	    leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), true);
 	  	    rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), false);
 	  	    
@@ -226,6 +248,17 @@ public class Localizer_Test {
 
       	    
       	    //turn the robot counter-clockwise out of the beta detection zone
+      	    leftMotor.stop(true);
+      	    rightMotor.stop(false);
+		  	for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
+		  	      motor.stop();
+			      motor.setAcceleration(3000);
+	  		    }
+	  		// Sleep for 1 second
+	  	    try {
+		  	      Thread.sleep(200);
+		    } catch (InterruptedException e) {     
+		  	}  
       	    leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), true);
       	    rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), false);
       	    
@@ -262,6 +295,17 @@ public class Localizer_Test {
       	    }	  
       	    
       	    //turn the robot counter-clockwise out of the beta detection zone
+      	    leftMotor.stop(true);
+      	    rightMotor.stop(false);
+		  	for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
+		  	      motor.stop();
+			      motor.setAcceleration(3000);
+	  		    }
+	  		// Sleep for 1 second
+	  	    try {
+		  	      Thread.sleep(200);
+		    } catch (InterruptedException e) {     
+		  	}  
       	    leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), true);
       	    rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 45), false);
       	    

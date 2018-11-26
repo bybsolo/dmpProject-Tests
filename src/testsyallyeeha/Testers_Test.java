@@ -100,26 +100,25 @@ public class Testers_Test {
 		// reset the motor
 		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
 			motor.stop();
-			motor.setAcceleration(2000);
+			motor.setAcceleration(3000);
 		}
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			// There is nothing to be done here
 		}
 		
 		//move the robot forward until the Y asis is detected
-		leftMotor.setSpeed(200);
-		rightMotor.setSpeed(200);
-		leftMotor.rotate(Navigation_Test.convertAngle(Project_Test.WHEEL_RAD, Project_Test.TRACK, 360), true);
-		rightMotor.rotate(-Navigation_Test.convertAngle(Project_Test.WHEEL_RAD, Project_Test.TRACK, 360), false);
+		leftMotor.setSpeed(400);
+		rightMotor.setSpeed(400);
+		leftMotor.rotate(Navigation_Test.convertAngle(Project_Test.WHEEL_RAD, Project_Test.TRACK, 720), true);
+		rightMotor.rotate(-Navigation_Test.convertAngle(Project_Test.WHEEL_RAD, Project_Test.TRACK, 720), false);
 	}
 	
 	public static void falseColor() {
 		
-		for (int i=0; i < 30; i++) {
+		for (int i=0; i < 10; i++) {
 		int color = Color_Test.color();
-		System.out.println(color);
 		if (color == 1 || color == 2 || color == 3 || color == 4) { // high level fetching
 			if (color == 1) {
 				Sound.beep();
@@ -144,12 +143,12 @@ public class Testers_Test {
 		
 			}
 		}
-//		try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 		}

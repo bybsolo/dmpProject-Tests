@@ -206,31 +206,6 @@ public class Color_Test {
 					return lastColor;
 				}
 				
-//				if (smallest == dBlue) {
-//					Grabber_Test.FOUND = true; ///
-//					if (counter == count) {
-//						return 1; // return blue
-//					}
-//				}
-//				if (smallest == dGreen) {
-//					Grabber_Test.FOUND = true; ///
-//					if (counter == count) {
-//						return 2; // return green
-//					}
-//				}
-//				if (smallest == dYellow) {
-//					Grabber_Test.FOUND = true; ///
-//					if (counter == count) {
-//						return 3; // return yellow
-//					}
-//				}
-//				if (smallest == dOrange) {
-//					if (counter == count) {
-//						return 4; // return orange
-//					}
-//				} else {
-//					return 0;
-//				}
 			} else
 				return 0;
 		}

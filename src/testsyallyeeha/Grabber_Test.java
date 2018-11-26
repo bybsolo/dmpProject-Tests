@@ -43,13 +43,21 @@ public class Grabber_Test {
 
 	private static final double T_x = Project_Test.T_x;
 	private static final double T_y = Project_Test.T_y;
+	private static final double TN_LL_x = Project_Test.TN_LL_x; // x coordinate of the lower left of the tunnel
+	private static final double TN_LL_y = Project_Test.TN_LL_y; // y coordinate of the lower left of the tunnel
+	private static final double TN_UR_x = Project_Test.TN_UR_x; // x coordinate of the upper right of the tunnel
+	private static final double TN_UR_y = Project_Test.TN_UR_y; // y coordinate of the upper right of the tunnel
 
-	public static boolean FOUND = false; ///
 	public static int rings = 0;
 	public static final int TOTALRING = 3;
 	public static int currentPoint;
 	public static boolean goHome = false;
-	
+
+	private static boolean blue = false;
+	private static boolean orange = false;
+	private static boolean green = false;
+	private static boolean yellow = false;
+
 	public static void travelToTree(Odometer_Test odometer) {
 
 		double[] odometerData = odometer.getXYT();
@@ -156,8 +164,8 @@ public class Grabber_Test {
 	 * of the tree
 	 */
 	public static int lowLevel() {
-		armMotor.setAcceleration(500);
-		armMotor.setSpeed(70);
+		armMotor.setAcceleration(1000);
+		armMotor.setSpeed(200);
 
 		leftMotor.setSpeed(ROTATE_SPEED);
 		rightMotor.setSpeed(ROTATE_SPEED);
@@ -184,26 +192,37 @@ public class Grabber_Test {
 
 		if (color == 1 || color == 2 || color == 3 || color == 4) {
 			if (color == 1) {
-				Sound.beep();
-				rings++;
+				if (blue == false) {
+					Sound.beep();
+					rings++;
+				}
+				blue = true;
 
 			} else if (color == 2) {
-				Sound.beep();
-				Sound.beep();
-				rings++;
-
+				if (green == false) {
+					Sound.beep();
+					Sound.beep();
+					rings++;
+				}
+				green = true;
 			} else if (color == 3) {
-				Sound.beep();
-				Sound.beep();
-				Sound.beep();
-				rings++;
+				if (yellow == false) {
+					Sound.beep();
+					Sound.beep();
+					Sound.beep();
+					rings++;
+				}
+				yellow = true;
 
 			} else {
-				Sound.beep();
-				Sound.beep();
-				Sound.beep();
-				Sound.beep();
-				rings++;
+				if (orange == false) {
+					Sound.beep();
+					Sound.beep();
+					Sound.beep();
+					Sound.beep();
+					rings++;
+				}
+				orange = true;
 			}
 
 		}
@@ -250,9 +269,9 @@ public class Grabber_Test {
 	 */
 	public static int highLevel() {
 
-		armMotor.setAcceleration(500);
-		armMotor.setSpeed(100);
-		armMotor.rotate(HIGH_ANGLE);
+//		armMotor.setAcceleration(500);
+//		armMotor.setSpeed(100);
+//		armMotor.rotate(HIGH_ANGLE);
 
 		closeHook();/////////////////////////////////////////////////////////////
 		leftMotor.setSpeed(PROBE_SPEED);
@@ -266,25 +285,37 @@ public class Grabber_Test {
 
 		if (color == 1 || color == 2 || color == 3 || color == 4) {
 			if (color == 1) {
-				Sound.beep();
-				rings++;
+				if (blue == false) {
+					Sound.beep();
+					rings++;
+				}
+				blue = true;
+
 			} else if (color == 2) {
-				Sound.beep();
-				Sound.beep();
-				rings++;
+				if (green == false) {
+					Sound.beep();
+					Sound.beep();
+					rings++;
+				}
+				green = true;
 			} else if (color == 3) {
-				Sound.beep();
-				Sound.beep();
-				Sound.beep();
-				rings++;
+				if (yellow == false) {
+					Sound.beep();
+					Sound.beep();
+					Sound.beep();
+					rings++;
+				}
+				yellow = true;
 
 			} else {
-				Sound.beep();
-				Sound.beep();
-				Sound.beep();
-				Sound.beep();
-				rings++;
-
+				if (orange == false) {
+					Sound.beep();
+					Sound.beep();
+					Sound.beep();
+					Sound.beep();
+					rings++;
+				}
+				orange = true;
 			}
 
 		}
@@ -306,7 +337,7 @@ public class Grabber_Test {
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -HIGH_PROBE - 5), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -HIGH_PROBE - 5), false);
 		/////////////////////////////////////////
-		resetArm();
+		// resetArm();
 		return color;
 
 	}
@@ -324,7 +355,7 @@ public class Grabber_Test {
 	 * the rings
 	 */
 	public static void closeHook() {
-		hookMotor.setSpeed(20);
+		hookMotor.setSpeed(30);
 		hookMotor.rotate(-HOOK_ANGLE);
 	}
 
@@ -347,24 +378,24 @@ public class Grabber_Test {
 		rightMotor.setSpeed(FORWARD_SPEED + 100);
 		closeHook();
 		armMotor.setAcceleration(2000);
-		armMotor.setSpeed(200);
+		armMotor.setSpeed(250);
 		armMotor.rotate(110);
-		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -10), true);
-		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -10), false);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -5), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -5), false);
 		// reset motor before rotating
 		leftMotor.stop(true);
 		rightMotor.stop(false);
 		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
-			motor.setAcceleration(3000);
+			motor.setAcceleration(5000);
 		}
 		try {
-			Thread.sleep(200);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 		}
-		leftMotor.setSpeed(FORWARD_SPEED + 100);
-		rightMotor.setSpeed(FORWARD_SPEED + 100);
-		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5), true);
-		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5), false);
+		leftMotor.setSpeed(FORWARD_SPEED + 200);
+		rightMotor.setSpeed(FORWARD_SPEED + 200);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 0), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 10), false);
 		leftMotor.stop(true);
 		rightMotor.stop(false);
 	}
@@ -395,8 +426,19 @@ public class Grabber_Test {
 		int nextPoint2 = (point + 2) % 4;
 		int nextPoint3 = (point + 3) % 4;
 
-		boolean[] availability = { (T_y != 1 && T_y != Island_LL_y), (T_x != 7 && T_x != Island_UR_x),
-				(T_y != 7 && T_y != Island_UR_y), (T_x != 1 && T_x != Island_LL_x) };
+		boolean[] availability = {
+				((T_y != 1 && T_y != Island_LL_y) && !(T_x == TN_LL_x && T_y - 1 == TN_LL_y)
+						&& !(T_x == TN_LL_x && T_y - 1 == TN_UR_y) && !(T_x == TN_UR_x && T_y - 1 == TN_LL_y)
+						&& !(T_x == TN_UR_x && T_y - 1 == TN_UR_y)),
+				((T_x != 7 && T_x != Island_UR_x) && !(T_x + 1 == TN_LL_x && T_y == TN_LL_y)
+						&& !(T_x + 1 == TN_LL_x && T_y == TN_UR_y) && !(T_x + 1 == TN_UR_x && T_y == TN_LL_y)
+						&& !(T_x + 1 == TN_UR_x && T_y == TN_UR_y)),
+				((T_y != 7 && T_y != Island_UR_y) && !(T_x == TN_LL_x && T_y + 1 == TN_LL_y)
+						&& !(T_x == TN_LL_x && T_y + 1 == TN_UR_y) && !(T_x == TN_UR_x && T_y + 1 == TN_LL_y)
+						&& !(T_x == TN_UR_x && T_y + 1 == TN_UR_y)),
+				((T_x != 1 && T_x != Island_LL_x) && !(T_x - 1 == TN_LL_x && T_y == TN_LL_y)
+						&& !(T_x - 1 == TN_LL_x && T_y == TN_UR_y) && !(T_x - 1 == TN_UR_x && T_y == TN_LL_y)
+						&& !(T_x - 1 == TN_UR_x && T_y == TN_UR_y)) };
 
 		if (!availability[nextPoint1] && !availability[nextPoint2] && !availability[nextPoint3]) {
 			// do nothing
@@ -409,8 +451,7 @@ public class Grabber_Test {
 
 			treeTravel(nextPoint2, nextPoint3, odometer);
 			probe(odometer, nextPoint3);
-			System.out.println(currentPoint);
-			
+
 			goHome = true;
 			treeTravel(currentPoint, point, odometer);
 
@@ -421,20 +462,32 @@ public class Grabber_Test {
 
 			treeTravel(nextPoint1, nextPoint3, odometer);
 			probe(odometer, nextPoint3);
-			
+
 			goHome = true;
 			treeTravel(currentPoint, point, odometer);
 
 		} else if (availability[nextPoint1] && availability[nextPoint2] && !availability[nextPoint3]) {
 
+			System.out.println("point is" + point); ////////////////
+			System.out.println("next point 1 is" + nextPoint1); ////////////////
+
 			treeTravel(point, nextPoint1, odometer);
 			probe(odometer, nextPoint1);
 
+			System.out.println("current point is" + currentPoint); ////////////////
+			System.out.println("Next point 1 is" + nextPoint1);/////////////////
+			System.out.println("Next point 2 is" + nextPoint2);////////////////
 			treeTravel(nextPoint1, nextPoint2, odometer);
 			probe(odometer, nextPoint2);
 
 			goHome = true;
+
+			System.out.println("current point is" + currentPoint); ////////////////
+			System.out.println("point is" + point); ////////////////
+
 			treeTravel(currentPoint, point, odometer);
+
+			System.out.println("current point is" + currentPoint); ////////////////
 
 		} else if (availability[nextPoint1] && !availability[nextPoint2] && !availability[nextPoint3]) {
 
@@ -450,7 +503,7 @@ public class Grabber_Test {
 
 			treeTravel(nextPoint3, nextPoint2, odometer);
 			probe(odometer, nextPoint2);
-			
+
 			goHome = true;
 			treeTravel(currentPoint, point, odometer);
 
@@ -489,7 +542,7 @@ public class Grabber_Test {
 	 * @param odometer   the odometer used by the robot
 	 */
 	public static void treeTravel(int startPoint, int endPoint, Odometer_Test odometer) {
-		if (rings < TOTALRING || goHome) {
+		if (rings < TOTALRING || goHome == true) {
 			// reset motor before rotating
 			leftMotor.stop(true);
 			rightMotor.stop(false);
@@ -505,9 +558,9 @@ public class Grabber_Test {
 
 			int direction;
 
-			if (endPoint == (startPoint + 1) % 4 || endPoint == (startPoint - 1) % 4) {
+			if (endPoint == (((startPoint + 1) % 4) + 4) % 4 || endPoint == (((startPoint - 1) % 4) + 4) % 4) {
 
-				if (endPoint == (startPoint + 1) % 4) {
+				if (endPoint == (((startPoint + 1) % 4) + 4) % 4) {
 
 					direction = -1;
 

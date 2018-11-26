@@ -51,19 +51,19 @@ public class Project_Test {
 	public static final int HOOK_SPEED = 10; //this is the speed used for the motor 
 	public static final int ARM_SPEED = 80; //this is the speed for the arm for the arm motor 
 	public static final int HOOK_ANGLE = -35; //this is the angle which the hook will open/close	
-	public static final int LOW_ANGLE = 105; //the angle the arm motor needs to turn to reach lowly-hanged rings, with respect to the initial position 
+	public static final int LOW_ANGLE = 120; //the angle the arm motor needs to turn to reach lowly-hanged rings, with respect to the initial position 
 	public static final int HIGH_ANGLE = 52; //the angle the arm motor needs to turn to reach highly-hanged rings, with respect to the initial position 
 	public static final int UNLOAD_ANGLE = 90; //the angle the arm motor needs to turn to unload the ring(s), with respect to the initial position 
 	
 	//The operating parameters for the navigation and diver system
 	public static final double OFF_SET = 2.5; //this is the offset from the 2 line-detecting light sensors to the wheel base
 	public static final int LOW_SPEED = 125; //this is the slow speed for precise movement 
-	public static final int MEDIUM_SPEED = 250; //this is the medium speed for intermediate movement
+	public static final int MEDIUM_SPEED = 300; //this is the medium speed for intermediate movement
 	public static final int HIGH_SPEED = 400; //this is the fast motor speed for less precious, faster movement (long distance travel)
 	public static final double WHEEL_RAD = 2.085; //the wheel radius of the wheels
-	public static final double TRACK = 14.65; //the wheel base of the robot
+	public static final double TRACK = 14.8; //the wheel base of the robot
 	public static final double TILE_SIZE = 30.48; //the tile length of the grid
-	public static final double HIGH_PROBE = 6.5;
+	public static final double HIGH_PROBE = 11.5;
 	public static final double LOW_PROBE = 11.5;
 	public static final int DISTANCE = 45; //distance from the wall used by the ultrasonic sensor during the ultrasonic localization 
 	
@@ -188,21 +188,15 @@ public class Project_Test {
 			(new Thread() {
 				public void run() {
 					//add method : 
-					Localizer_Test.fallingEdge(odometer);
-					Localizer_Test.lightLocalizeLite(odometer);
-					Sound.beep();
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					Navigation_Test.tunnelTravel(odometer);
-					System.out.println("x is  " + odometer.getXYT()[0] + "  y is " + odometer.getXYT()[1] + "  T is " +odometer.getXYT()[2]);
-					Grabber_Test.travelToTree(odometer);
-					
-					Navigation_Test.tunnelTravel(odometer);
-					Navigation_Test.cornerTravel(odometer);
+//					Localizer_Test.fallingEdge(odometer);
+//					Localizer_Test.lightLocalizeLite(odometer);
+//					Navigation_Test.tunnelTravel(odometer);
+					odometer.setXYT(2.5*TILE_SIZE, 6*TILE_SIZE, 0);
+					T_x = 5;
+					T_y = 7;
+					Grabber_Test.travelToTree(odometer);	
+//					Navigation_Test.tunnelTravel(odometer);
+//					Navigation_Test.cornerTravel(odometer);
 				
 				}
 			}).start();

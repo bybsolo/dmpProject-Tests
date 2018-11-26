@@ -167,15 +167,15 @@ public class Navigation_Test {
 				motor.setAcceleration(3000);
 			}
 			try {
-				Thread.sleep(500);
+				Thread.sleep(200);
 			} catch (InterruptedException e) {
 			}
 
 			leftMotor.setSpeed(FORWARD_SPEED);
 			rightMotor.setSpeed(FORWARD_SPEED);
 
-			leftMotor.rotate(convertDistance(WHEEL_RAD, dDistance), true);
-			rightMotor.rotate(convertDistance(WHEEL_RAD, dDistance), false);
+			leftMotor.rotate(convertDistance(WHEEL_RAD, dDistance -4), true);
+			rightMotor.rotate(convertDistance(WHEEL_RAD, dDistance -4), false);
 			
 			intersectionCorrection(odometer);
 			odometer.setX(x * TILE_SIZE);
@@ -545,7 +545,7 @@ public class Navigation_Test {
 		leftMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 10), true);
 		rightMotor.rotate(-Navigation_Test.convertDistance(WHEEL_RAD, 10), false);
 
-		armMotor.setAcceleration(1000);
+		armMotor.setAcceleration(500);
 		armMotor.setSpeed(100);
 		armMotor.rotate(80);
 		
