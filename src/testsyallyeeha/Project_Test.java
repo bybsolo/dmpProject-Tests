@@ -30,40 +30,39 @@ public class Project_Test {
 	//The parameters for driving the robot
 	//The island parameters
 	public static double Island_LL_x = 0; //x coordinate of the lower left corner of the island
-	public static double Island_LL_y = 5; //y coordinate of the lower left corner of the island
-	public static double Island_UR_x = 6; //x coordinate of the upper right corner of the island
-	public static double Island_UR_y = 8; //y coordinate of the upper right corner of the island
+	public static double Island_LL_y = 0; //y coordinate of the lower left corner of the island
+	public static double Island_UR_x = 4; //x coordinate of the upper right corner of the island
+	public static double Island_UR_y = 5; //y coordinate of the upper right corner of the island
 	
 	//The team-specific parameters
-	public static int corner = 1; //the starting corner
-	public static double LL_x = 2; //x coordinate of the lower left corner of the home section
-	public static double LL_y = 0; //y coordinate of the lower left corner of the home section
+	public static int corner = 2; //the starting corner
+	public static double LL_x = 6; //x coordinate of the lower left corner of the home section
+	public static double LL_y = 4; //y coordinate of the lower left corner of the home section
 	public static double UR_x = 8; //x coordinate of the upper right corner of the home section
-	public static double UR_y = 3; //y coordinate of the upper right corner of the home section
-	public static double TN_LL_x = 2; //x coordinate of the lower left of the tunnel
-	public static double TN_LL_y = 3; //y coordinate of the lower left of the tunnel
-	public static double TN_UR_x = 3; //x coordinate of the upper right of the tunnel
+	public static double UR_y = 8; //y coordinate of the upper right corner of the home section
+	public static double TN_LL_x = 4; //x coordinate of the lower left of the tunnel
+	public static double TN_LL_y = 4; //y coordinate of the lower left of the tunnel
+	public static double TN_UR_x = 6; //x coordinate of the upper right of the tunnel
 	public static double TN_UR_y = 5; //y coordinate of the upper right of the tunnel
-	public static double T_x = 7; //x coordinate of the ring tree
-	public static double T_y = 6; //y coordinate of the ring tree
+	public static double T_x = 3; //x coordinate of the ring tree
+	public static double T_y = 2; //y coordinate of the ring tree
 	
 	//The operating parameters for arm and hook (grabbing mechanism)
 	public static final int HOOK_SPEED = 10; //this is the speed used for the motor 
 	public static final int ARM_SPEED = 80; //this is the speed for the arm for the arm motor 
 	public static final int HOOK_ANGLE = -35; //this is the angle which the hook will open/close	
 	public static final int LOW_ANGLE = 120; //the angle the arm motor needs to turn to reach lowly-hanged rings, with respect to the initial position 
-	public static final int HIGH_ANGLE = 52; //the angle the arm motor needs to turn to reach highly-hanged rings, with respect to the initial position 
-	public static final int UNLOAD_ANGLE = 90; //the angle the arm motor needs to turn to unload the ring(s), with respect to the initial position 
+	public static final int UNLOAD_ANGLE = 110; //the angle the arm motor needs to turn to unload the ring(s), with respect to the initial position 
 	
 	//The operating parameters for the navigation and diver system
 	public static final double OFF_SET = 2.5; //this is the offset from the 2 line-detecting light sensors to the wheel base
-	public static final int LOW_SPEED = 140; //this is the slow speed for precise movement 
+	public static final int LOW_SPEED = 130; //this is the slow speed for precise movement 
 	public static final int MEDIUM_SPEED = 300; //this is the medium speed for intermediate movement
 	public static final int HIGH_SPEED = 400; //this is the fast motor speed for less precious, faster movement (long distance travel)
 	public static final double WHEEL_RAD = 2.085; //the wheel radius of the wheels
 	public static final double TRACK = 15.2; //the wheel base of the robot
 	public static final double TILE_SIZE = 30.48; //the tile length of the grid
-	public static final double HIGH_PROBE = 11.5;
+	public static final double HIGH_PROBE = 11;
 	public static final double LOW_PROBE = 11.5;
 	public static final int DISTANCE = 45; //distance from the wall used by the ultrasonic sensor during the ultrasonic localization 
 	
@@ -122,8 +121,7 @@ public class Project_Test {
 		    lcd.drawString("< ..test4..", 0,4);
 		    buttonChoice = Button.waitForAnyPress(); 
 		} while (buttonChoice!=Button.ID_UP && buttonChoice != Button.ID_RIGHT && buttonChoice != Button.ID_DOWN && buttonChoice != Button.ID_LEFT);
-		
-		Odometer_Test odomter;
+
 		Thread odoThread = new Thread(odometer);
 		odoThread.start();
 		

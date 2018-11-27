@@ -112,17 +112,18 @@ public class Navigation_Test {
 			} catch (InterruptedException e) {
 			}
 
-			leftMotor.setSpeed(FORWARD_SPEED);
-			rightMotor.setSpeed(FORWARD_SPEED);
-			leftMotor.rotate(convertDistance(WHEEL_RAD, -5), true);
-			rightMotor.rotate(convertDistance(WHEEL_RAD, -5), false);
+			leftMotor.setSpeed(FORWARD_SPEED-50);
+			rightMotor.setSpeed(FORWARD_SPEED-50);
+			leftMotor.rotate(convertDistance(WHEEL_RAD, -6), true);
+			rightMotor.rotate(convertDistance(WHEEL_RAD, -6), false);
+			
 			lineCorrection(odometer);
 			
 			// move the robot towards the new way point
 			leftMotor.setSpeed(FORWARD_SPEED);
 			rightMotor.setSpeed(FORWARD_SPEED);
 			
-			double moveDistance = TILE_SIZE*Math.floor((dDistance/TILE_SIZE)) - 15;
+			double moveDistance = TILE_SIZE*Math.floor((dDistance/TILE_SIZE)) - 18;
 			leftMotor.rotate(convertDistance(WHEEL_RAD, moveDistance), true);
 			rightMotor.rotate(convertDistance(WHEEL_RAD, moveDistance), false);
 			
@@ -529,8 +530,8 @@ public class Navigation_Test {
 				|| ((currentT <= 10 || currentT>= 350) && pointT==1)
 				|| (currentT >= 170 && currentT<=190  && pointT == 3) 
 				|| (currentT >= 260 && currentT<=280  && pointT ==2)) {
-		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 - 2.5), true);
-		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 - 2.5), false);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 - 2), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 - 2), false);
 		}
 		
 		else if (((currentT <= 10 || currentT>= 350) && pointT==0)
@@ -538,8 +539,8 @@ public class Navigation_Test {
 				|| (currentT >= 170 && currentT<=190 && pointT==2)
 				|| (currentT >= 80 && currentT<=100 && pointT==3)
 				) {
-			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 + 2.5), true);
-			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 + 2.5), false);
+			leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 + 2), true);
+			rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, TILE_SIZE / 2 + 2), false);
 		}
 		//////////////////////
 		//reset motor before rotating
@@ -751,7 +752,7 @@ public static void cornerTravel(Odometer_Test odometer) {
 			motor.setAcceleration(2000);
 		}
 		try {
-			Thread.sleep(200);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			// There is nothing to be done here
 		}
