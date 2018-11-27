@@ -44,8 +44,8 @@ public class Project_Test {
 	public static double TN_LL_y = 3; //y coordinate of the lower left of the tunnel
 	public static double TN_UR_x = 3; //x coordinate of the upper right of the tunnel
 	public static double TN_UR_y = 5; //y coordinate of the upper right of the tunnel
-	public static double T_x = 5; //x coordinate of the ring tree
-	public static double T_y = 7; //y coordinate of the ring tree
+	public static double T_x = 7; //x coordinate of the ring tree
+	public static double T_y = 6; //y coordinate of the ring tree
 	
 	//The operating parameters for arm and hook (grabbing mechanism)
 	public static final int HOOK_SPEED = 10; //this is the speed used for the motor 
@@ -57,11 +57,11 @@ public class Project_Test {
 	
 	//The operating parameters for the navigation and diver system
 	public static final double OFF_SET = 2.5; //this is the offset from the 2 line-detecting light sensors to the wheel base
-	public static final int LOW_SPEED = 125; //this is the slow speed for precise movement 
+	public static final int LOW_SPEED = 140; //this is the slow speed for precise movement 
 	public static final int MEDIUM_SPEED = 300; //this is the medium speed for intermediate movement
 	public static final int HIGH_SPEED = 400; //this is the fast motor speed for less precious, faster movement (long distance travel)
 	public static final double WHEEL_RAD = 2.085; //the wheel radius of the wheels
-	public static final double TRACK = 14.8; //the wheel base of the robot
+	public static final double TRACK = 15.2; //the wheel base of the robot
 	public static final double TILE_SIZE = 30.48; //the tile length of the grid
 	public static final double HIGH_PROBE = 11.5;
 	public static final double LOW_PROBE = 11.5;
@@ -188,15 +188,12 @@ public class Project_Test {
 			(new Thread() {
 				public void run() {
 					//add method : 
-//					Localizer_Test.fallingEdge(odometer);
-//					Localizer_Test.lightLocalizeLite(odometer);
-//					Navigation_Test.tunnelTravel(odometer);
-					odometer.setXYT(2.5*TILE_SIZE, 6*TILE_SIZE, 0);
-					T_x = 5;
-					T_y = 7;
+					Localizer_Test.fallingEdge(odometer);
+					Localizer_Test.lightLocalizeLite(odometer);
+					Navigation_Test.tunnelTravel(odometer);
 					Grabber_Test.travelToTree(odometer);	
-//					Navigation_Test.tunnelTravel(odometer);
-//					Navigation_Test.cornerTravel(odometer);
+					Navigation_Test.tunnelTravel(odometer);
+				    Navigation_Test.cornerTravel(odometer);
 				
 				}
 			}).start();

@@ -149,6 +149,7 @@ public class Grabber_Test {
 
 			Navigation_Test.lineCorrection(odometer);
 			if (rings < 2) {
+			//if(rings<TOTALRING) { //////
 				color = Grabber_Test.lowLevel();
 				Navigation_Test.lineCorrection(odometer);
 			}
@@ -371,22 +372,22 @@ public class Grabber_Test {
 			motor.setAcceleration(3000);
 		}
 		try {
-			Thread.sleep(200);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 		}
-		leftMotor.setSpeed(FORWARD_SPEED + 100);
-		rightMotor.setSpeed(FORWARD_SPEED + 100);
+		leftMotor.setSpeed(FORWARD_SPEED + 200);
+		rightMotor.setSpeed(FORWARD_SPEED + 200);
 		closeHook();
-		armMotor.setAcceleration(2000);
-		armMotor.setSpeed(250);
-		armMotor.rotate(110);
+		armMotor.setAcceleration(5000);
+		armMotor.setSpeed(300);
+		armMotor.rotate(110, true);
 		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -5), true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, -5), false);
 		// reset motor before rotating
 		leftMotor.stop(true);
 		rightMotor.stop(false);
 		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
-			motor.setAcceleration(5000);
+			motor.setAcceleration(10000);
 		}
 		try {
 			Thread.sleep(50);
@@ -394,8 +395,24 @@ public class Grabber_Test {
 		}
 		leftMotor.setSpeed(FORWARD_SPEED + 200);
 		rightMotor.setSpeed(FORWARD_SPEED + 200);
-		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 0), true);
-		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 10), false);
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5), false);
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		
+		leftMotor.stop(true);
+		rightMotor.stop(false);
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.setAcceleration(10000);
+		}
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+		}
+		leftMotor.setSpeed(FORWARD_SPEED + 200);
+		rightMotor.setSpeed(FORWARD_SPEED + 200);
+		leftMotor.rotate(0, true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5), false);
 		leftMotor.stop(true);
 		rightMotor.stop(false);
 	}

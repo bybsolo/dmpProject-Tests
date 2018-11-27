@@ -212,47 +212,7 @@ public class Color_Test {
 		return 0;
 		
 		
-		
-		
-		
-		
-		//working code
-		
-		//obtain reading from sensor and normalize them
-//		myColorSample.fetchSample(sampleColor, 0); 
-//		double r = rNormalize(sampleColor[0]*1000, sampleColor[1]*1000, sampleColor[2]*1000);
-//		double g = gNormalize(sampleColor[0]*1000, sampleColor[1]*1000, sampleColor[2]*1000);
-//		double b = bNormalize(sampleColor[0]*1000, sampleColor[1]*1000, sampleColor[2]*1000);
-//		
-//		double dBlue = euclidean(r,g,b, blueRMean, blueGMean, blueBMean); //check Euclidean distance from being Blue
-//		double dGreen = euclidean(r,g,b, greenRMean, greenGMean, greenBMean);//check Euclidean distance from being Green
-//		double dYellow = euclidean(r,g,b, yellowRMean, yellowGMean, yellowBMean);//check Euclidean distance from being Yellow
-//		double dOrange = euclidean(r,g,b, orangeRMean, orangeGMean, orangeBMean); //check Euclidean distance from being Orange
-//		
-//		//rank the distances and choose the color --smallest euclidean
-//		double[] d = {dBlue, dGreen, dYellow, dOrange};
-//		for (int i= 0; i<4; i++) {
-//			if(i==0) smallest=d[i];
-//			else if(d[i] < smallest) smallest = d[i];
-//		}
-//		System.out.println(r +", "+g + ", "+b);
-//		System.out.println(dBlue+ ", "+dGreen+ ", "+ dYellow+", "+ dOrange);
-//		//return the TR value
-//		if (smallest <= colorThreshold) {
-//			if (smallest == dBlue)
-//				return 1; // return blue
-//			if (smallest == dGreen)
-//				return 2; // return green
-//			if (smallest == dYellow)
-//				return 3; // return yellow
-//			if (smallest == dOrange)
-//				return 4; // return orange
-//			else
-//				return 0;
-//		} else
-//			return 0;
-//		
-
+	
 	}
 
 }

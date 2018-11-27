@@ -101,16 +101,84 @@ public class Navigation_Test {
 			turnTo(dAngle, currentT); // turn the robot to the direction of the new way point
 			
 			//correct issue in beta demo
+			// reset the motor
+			leftMotor.stop(true);
+			rightMotor.stop(false);
+			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+				motor.setAcceleration(3000);
+			}
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+			}
+
+			leftMotor.setSpeed(FORWARD_SPEED);
+			rightMotor.setSpeed(FORWARD_SPEED);
+			leftMotor.rotate(convertDistance(WHEEL_RAD, -5), true);
+			rightMotor.rotate(convertDistance(WHEEL_RAD, -5), false);
 			lineCorrection(odometer);
 			
 			// move the robot towards the new way point
 			leftMotor.setSpeed(FORWARD_SPEED);
 			rightMotor.setSpeed(FORWARD_SPEED);
+			
+			double moveDistance = TILE_SIZE*Math.floor((dDistance/TILE_SIZE)) - 15;
+			leftMotor.rotate(convertDistance(WHEEL_RAD, moveDistance), true);
+			rightMotor.rotate(convertDistance(WHEEL_RAD, moveDistance), false);
+			
+			// reset the motor
+			leftMotor.stop(true);
+			rightMotor.stop(false);
+			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+				motor.setAcceleration(3000);
+			}
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+			}
 
-			leftMotor.rotate(convertDistance(WHEEL_RAD, TILE_SIZE*Math.floor(dDistance/TILE_SIZE) - 6), true);
-			rightMotor.rotate(convertDistance(WHEEL_RAD, TILE_SIZE*Math.floor(dDistance/TILE_SIZE) - 6), false);
+			leftMotor.setSpeed(FORWARD_SPEED);
+			rightMotor.setSpeed(FORWARD_SPEED);
+			leftMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+			rightMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+			
+			// reset the motor
+			leftMotor.stop(true);
+			rightMotor.stop(false);
+			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+				motor.setAcceleration(3000);
+			}
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+			}
 
+			leftMotor.setSpeed(FORWARD_SPEED);
+			rightMotor.setSpeed(FORWARD_SPEED);
+			leftMotor.rotate(convertDistance(WHEEL_RAD, -5), true);
+			rightMotor.rotate(convertDistance(WHEEL_RAD, -5), false);
+			
 			lineCorrection(odometer);
+			
+			// reset the motor
+			leftMotor.stop(true);
+			rightMotor.stop(false);
+			for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+				motor.setAcceleration(3000);
+			}
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+			}
+
+			leftMotor.setSpeed(FORWARD_SPEED);
+			rightMotor.setSpeed(FORWARD_SPEED);
+			leftMotor.rotate(Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), true);
+			rightMotor.rotate(-Navigation_Test.convertAngle(WHEEL_RAD, TRACK, 90), false);
+		
+			lineCorrection(odometer);
+			odometer.setX(x * TILE_SIZE);
+			odometer.setY(y * TILE_SIZE);
 			
 		} else {
 			if ((x*TILE_SIZE - currentX)>= 5 && (y * TILE_SIZE - currentY) >= 5)
@@ -560,8 +628,10 @@ public class Navigation_Test {
 		
 		leftMotor.setSpeed(FORWARD_SPEED);
 		rightMotor.setSpeed(FORWARD_SPEED);
-		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, (tunnelLength + 0.8) * TILE_SIZE), true);
-		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, (tunnelLength + 0.8) * TILE_SIZE), false);
+		
+		double moveDistance = (tunnelLength + 0.8) * TILE_SIZE;
+		leftMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, moveDistance), true);
+		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, moveDistance), false);
 
 		Grabber_Test.resetArm();
 		
