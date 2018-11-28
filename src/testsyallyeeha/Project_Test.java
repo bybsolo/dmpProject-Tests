@@ -108,69 +108,77 @@ public class Project_Test {
 	 * @param args
 	 * @throws OdometerExceptions_Test
 	 */
-	public static void main(String[] args) throws OdometerExceptions_Test{
-		
+
+	public static void main(String[] args) throws OdometerExceptions_Test {
+		Map data = WiFi.Wifi();
+
+		int redTeam = ((Long) data.get("RedTeam")).intValue();
+		int greenTeam = ((Long) data.get("GreenTeam")).intValue();
+
+		if (redTeam == 12) {
+
+			corner = ((Long) data.get("RedCorner")).intValue(); // the starting corner
+			LL_x = ((Long) data.get("Red_LL_x")).intValue(); // x coordinate of the lower left corner of the home
+																// section
+			LL_y = ((Long) data.get("Red_LL_y")).intValue(); // y coordinate of the lower left corner of the home
+																// section
+			UR_x = ((Long) data.get("Red_UR_x")).intValue(); // x coordinate of the upper right corner of the home
+																// section
+			UR_y = ((Long) data.get("Red_UR_y")).intValue(); // y coordinate of the upper right corner of the home
+																// section
+			TN_LL_x = ((Long) data.get("TNR_LL_x")).intValue(); // x coordinate of the lower left of the tunnel
+			TN_LL_y = ((Long) data.get("TNR_LL_y")).intValue(); // y coordinate of the lower left of the tunnel
+			TN_UR_x = ((Long) data.get("TNR_UR_x")).intValue(); // x coordinate of the upper right of the tunnel
+			TN_UR_y = ((Long) data.get("TNR_UR_y")).intValue(); // y coordinate of the upper right of the tunnel
+			T_x = ((Long) data.get("TR_x")).intValue(); // x coordinate of the ring tree
+			T_y = ((Long) data.get("TR_y")).intValue(); // y coordinate of the ring tree
+
+		} else {
+
+			corner = ((Long) data.get("GreenCorner")).intValue(); // the starting corner
+			LL_x = ((Long) data.get("Green_LL_x")).intValue(); // x coordinate of the lower left corner of the home
+																// section
+			LL_y = ((Long) data.get("Green_LL_y")).intValue(); // y coordinate of the lower left corner of the home
+																// section
+			UR_x = ((Long) data.get("Green_UR_x")).intValue(); // x coordinate of the upper right corner of the home
+																// section
+			UR_y = ((Long) data.get("Green_UR_y")).intValue(); // y coordinate of the upper right corner of the home
+																// section
+			TN_LL_x = ((Long) data.get("TNG_LL_x")).intValue(); // x coordinate of the lower left of the tunnel
+			TN_LL_y = ((Long) data.get("TNG_LL_y")).intValue(); // y coordinate of the lower left of the tunnel
+			TN_UR_x = ((Long) data.get("TNG_UR_x")).intValue(); // x coordinate of the upper right of the tunnel
+			TN_UR_y = ((Long) data.get("TNG_UR_y")).intValue(); // y coordinate of the upper right of the tunnel
+			T_x = ((Long) data.get("TG_x")).intValue(); // x coordinate of the ring tree
+			T_y = ((Long) data.get("TG_y")).intValue(); // y coordinate of the ring tree
+
+		}
+
+		Island_LL_x = ((Long) data.get("Island_LL_x")).intValue(); // x coordinate of the lower left corner of the
+																	// island
+		Island_LL_y = ((Long) data.get("Island_LL_y")).intValue(); // y coordinate of the lower left corner of the
+																	// island
+		Island_UR_x = ((Long) data.get("Island_UR_x")).intValue(); // x coordinate of the upper right corner of the
+																	// island
+		Island_UR_y = ((Long) data.get("Island_UR_y")).intValue(); // y coordinate of the upper right corner of the
+																	// island
+
 		final Odometer_Test odometer = Odometer_Test.getOdometer(leftMotor, rightMotor, TRACK, WHEEL_RAD);
-		int buttonChoice;
-	
-		do {
-			lcd.clear();
-			lcd.drawString("^ ..test1..", 0,1);
-		    lcd.drawString("> ..test2..", 0,2);
-		    lcd.drawString("v ..test3..", 0,3);
-		    lcd.drawString("< ..test4..", 0,4);
-		    buttonChoice = Button.waitForAnyPress(); 
-		} while (buttonChoice!=Button.ID_UP && buttonChoice != Button.ID_RIGHT && buttonChoice != Button.ID_DOWN && buttonChoice != Button.ID_LEFT);
 
 		Thread odoThread = new Thread(odometer);
 		odoThread.start();
-		
-		//test 1 
-		if(buttonChoice==Button.ID_UP) {
-			(new Thread() {
-				public void run() {
-					Testers_Test.newLine(odometer);
-					
-				}
-			}).start();
-		}
-		//test 2
-		if(buttonChoice==Button.ID_RIGHT) {
-			(new Thread() {
-				public void run() {
-					//add method : driver wheel base test
-					Testers_Test.trackCheck();
-				}
-			}).start();
-		}
-		//test 3
-		if(buttonChoice==Button.ID_DOWN) {
-			(new Thread() {
-				public void run() {
-					//add method : 
-					Localizer_Test.fallingEdge(odometer);
-					Localizer_Test.lightLocalizeLite(odometer);
-					Navigation_Test.tunnelTravel(odometer);
-					Grabber_Test.travelToTree(odometer);	
-					Navigation_Test.tunnelTravel(odometer);
-				    Navigation_Test.cornerTravel(odometer);
-				
-				}
-			}).start();
-		}
-		//test 4
-		if(buttonChoice==Button.ID_LEFT) {
-			(new Thread() {
-				public void run() {
-					//add method here: test the new filter 
-					Testers_Test.falseColor();
-				}
-			}).start();
-		}
-		
-		//stop the system when the exit button is pressed
-	    while (Button.waitForAnyPress() != Button.ID_ESCAPE);
-	    System.exit(0);
-	}
 
+		(new Thread() {
+			public void run() {
+				// add method :
+				Localizer_Test.fallingEdge(odometer);
+				Localizer_Test.lightLocalizeLite(odometer);
+				Navigation_Test.tunnelTravel(odometer);
+				Grabber_Test.travelToTree(odometer);
+				Navigation_Test.tunnelTravel(odometer);
+				Navigation_Test.cornerTravel(odometer);
+
+			}
+		}).start();
+
+	}
 }
