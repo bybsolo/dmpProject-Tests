@@ -960,7 +960,7 @@ public static void cornerTravel(Odometer_Test odometer) {
 		myRightLineSample.fetchSample(sampleRightLine, 0);
 		rightOne = (int)(sampleRightLine[0]*1000.0);
 		try {
-			Thread.sleep(120);
+			Thread.sleep(80);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -981,6 +981,80 @@ public static void cornerTravel(Odometer_Test odometer) {
 		
 	}
 
+//	
+//	///////////////////////////////////////////////////////////////////////
+//	public static int lineDetectionThree() {
+//		int differentialLeftOne = 0;
+//		int differentialRightOne = 0;
+//		int differentialLeftTwo = 0;
+//		int differentialRightTwo = 0;
+//		int differentialLeftThree = 0;
+//		int differentialRightThree = 0;
+//	
+//		int leftOne;
+//		int leftTwo;
+//		int rightOne;
+//		int rightTwo;
+//		int leftThree;
+//		int rightThree;
+//		int leftFour;
+//		int rightFour;
+//		
+//		myLeftLineSample.fetchSample(sampleLeftLine, 0);
+//		leftOne = (int)(sampleLeftLine[0]*1000.0);
+//		myRightLineSample.fetchSample(sampleRightLine, 0);
+//		rightOne = (int)(sampleRightLine[0]*1000.0);
+//		try {
+//			Thread.sleep(120);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	
+//		myLeftLineSample.fetchSample(sampleLeftLine, 0);
+//		leftTwo = (int)(sampleLeftLine[0]*1000.0);
+//		myRightLineSample.fetchSample(sampleRightLine, 0);
+//		rightTwo = (int)(sampleRightLine[0]*1000.0);
+//		try {
+//			Thread.sleep(120);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	
+//		myLeftLineSample.fetchSample(sampleLeftLine, 0);
+//		leftThree = (int)(sampleLeftLine[0]*1000.0);
+//		myRightLineSample.fetchSample(sampleRightLine, 0);
+//		rightThree = (int)(sampleRightLine[0]*1000.0);
+//		try {
+//			Thread.sleep(120);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		myLeftLineSample.fetchSample(sampleLeftLine, 0);
+//		leftFour = (int)(sampleLeftLine[0]*1000.0);
+//		myRightLineSample.fetchSample(sampleRightLine, 0);
+//		rightFour = (int)(sampleRightLine[0]*1000.0);
+//		
+//		
+//		differentialLeftOne = leftOne - leftTwo;
+//		differentialRightOne = rightOne - rightTwo;		
+//		differentialLeftTwo = Math.abs(leftTwo - leftThree);
+//		differentialRightTwo = Math.abs(rightTwo - rightThree);
+//		differentialLeftThree = Math.abs(leftOne - leftFour);
+//		differentialRightThree = Math.abs(rightOne - rightFour);
+//		
+//		if(differentialLeftOne >= 50 && differentialRightOne >= 50 && differentialRightTwo<80 && differentialLeftTwo<80 && differentialLeftThree >= 50 && differentialRightThree >= 50) return 3;
+//		else if(differentialLeftOne >= 50 && differentialLeftTwo<50 && differentialLeftThree >= 50 ) return 1;
+//		else if(differentialRightOne >= 50 &&  differentialRightTwo<50 && differentialRightThree >= 50) return 2;	
+//		else return 0;
+//		
+//	}
+//	//////////////////////////////////////////////////////////////////////////
+//	
+	
 	
 	public static void adjustment(Odometer_Test odometer) {
 		boolean left = false;
@@ -988,7 +1062,12 @@ public static void cornerTravel(Odometer_Test odometer) {
 		boolean firstStop = true;
 
 		while (left == false || right == false) {
-			int lineStatus = lineDetection();
+			///////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////
+			int lineStatus = lineDetection(); 
+			//////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////
+			///////////////////////////////////////////////////////
 			if (lineStatus == 3) {
 				if (left == false) {
 					if (firstStop) {

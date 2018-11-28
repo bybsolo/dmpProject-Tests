@@ -56,7 +56,7 @@ public class Project_Test {
 	
 	//The operating parameters for the navigation and diver system
 	public static final double OFF_SET = 2.5; //this is the offset from the 2 line-detecting light sensors to the wheel base
-	public static final int LOW_SPEED = 130; //this is the slow speed for precise movement 
+	public static final int LOW_SPEED = 200; //this is the slow speed for precise movement 
 	public static final int MEDIUM_SPEED = 300; //this is the medium speed for intermediate movement
 	public static final int HIGH_SPEED = 400; //this is the fast motor speed for less precious, faster movement (long distance travel)
 	public static final double WHEEL_RAD = 2.085; //the wheel radius of the wheels
@@ -64,7 +64,7 @@ public class Project_Test {
 	public static final double TILE_SIZE = 30.48; //the tile length of the grid
 	public static final double HIGH_PROBE = 11;
 	public static final double LOW_PROBE = 11.5;
-	public static final int DISTANCE = 45; //distance from the wall used by the ultrasonic sensor during the ultrasonic localization 
+	public static final int DISTANCE = 30; //distance from the wall used by the ultrasonic sensor during the ultrasonic localization 
 	
 	//create port and object for the motors (4 in total)
 	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A")); //the motor for the left wheel
@@ -129,45 +129,7 @@ public class Project_Test {
 		if(buttonChoice==Button.ID_UP) {
 			(new Thread() {
 				public void run() {
-					Grabber_Test.openHook();
-					
-					armMotor.setAcceleration(500);
-					armMotor.setSpeed(70);//100 for hugh level 
-					
-					armMotor.rotate(100);
-					
-					//for lower deck, sleep a bit
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					hookMotor.setSpeed(30);
-					Grabber_Test.closeHook();
-					try {
-						Thread.sleep(5000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					Grabber_Test.openHook();
-					
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					armMotor.setAcceleration(500);
-					armMotor.setSpeed(150);
-					while (armMotor.getTachoCount() != 0) {
-						armMotor.backward();
-					}
-					armMotor.resetTachoCount();
+					Testers_Test.newLine(odometer);
 					
 				}
 			}).start();

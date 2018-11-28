@@ -147,7 +147,7 @@ public class Grabber_Test {
 
 			Navigation_Test.lineCorrection(odometer);
 			if (rings < LOWER_MAX) {
-			//if(rings<TOTALRING) { //////
+				// if(rings<TOTALRING) { //////
 				color = Grabber_Test.lowLevel();
 				Navigation_Test.lineCorrection(odometer);
 			}
@@ -274,7 +274,7 @@ public class Grabber_Test {
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, HIGH_PROBE), false);
 		leftMotor.stop(true);
 		rightMotor.stop(false);
-		
+
 		int color = Color_Test.color();
 
 		if (color == 1 || color == 2 || color == 3 || color == 4) {
@@ -391,7 +391,7 @@ public class Grabber_Test {
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5), false);
 		leftMotor.stop(true);
 		rightMotor.stop(false);
-		
+
 		leftMotor.stop(true);
 		rightMotor.stop(false);
 		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
@@ -405,7 +405,7 @@ public class Grabber_Test {
 		rightMotor.setSpeed(FORWARD_SPEED + 200);
 		leftMotor.rotate(0, true);
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 3), false);
-		
+
 		leftMotor.stop(true);
 		rightMotor.stop(false);
 		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
@@ -421,7 +421,7 @@ public class Grabber_Test {
 		rightMotor.rotate(Navigation_Test.convertDistance(WHEEL_RAD, 5), false);
 		leftMotor.stop(true);
 		rightMotor.stop(false);
-		
+
 		Sound.beep();
 		Sound.beep();
 		Sound.beep();
@@ -459,10 +459,10 @@ public class Grabber_Test {
 				((T_y != 1 && T_y != Island_LL_y) && !(T_x == TN_LL_x && T_y - 1 == TN_LL_y)
 						&& !(T_x == TN_LL_x && T_y - 1 == TN_UR_y) && !(T_x == TN_UR_x && T_y - 1 == TN_LL_y)
 						&& !(T_x == TN_UR_x && T_y - 1 == TN_UR_y)),
-				((T_x != 7 && T_x != Island_UR_x) && !(T_x + 1 == TN_LL_x && T_y == TN_LL_y)
+				((T_x != 14 && T_x != Island_UR_x) && !(T_x + 1 == TN_LL_x && T_y == TN_LL_y)
 						&& !(T_x + 1 == TN_LL_x && T_y == TN_UR_y) && !(T_x + 1 == TN_UR_x && T_y == TN_LL_y)
 						&& !(T_x + 1 == TN_UR_x && T_y == TN_UR_y)),
-				((T_y != 7 && T_y != Island_UR_y) && !(T_x == TN_LL_x && T_y + 1 == TN_LL_y)
+				((T_y != 8 && T_y != Island_UR_y) && !(T_x == TN_LL_x && T_y + 1 == TN_LL_y)
 						&& !(T_x == TN_LL_x && T_y + 1 == TN_UR_y) && !(T_x == TN_UR_x && T_y + 1 == TN_LL_y)
 						&& !(T_x == TN_UR_x && T_y + 1 == TN_UR_y)),
 				((T_x != 1 && T_x != Island_LL_x) && !(T_x - 1 == TN_LL_x && T_y == TN_LL_y)
@@ -504,7 +504,7 @@ public class Grabber_Test {
 
 			goHome = true;
 			treeTravel(currentPoint, point, odometer);
-			
+
 		} else if (availability[nextPoint1] && !availability[nextPoint2] && !availability[nextPoint3]) {
 
 			treeTravel(point, nextPoint1, odometer);
@@ -512,7 +512,7 @@ public class Grabber_Test {
 
 			goHome = true;
 			treeTravel(currentPoint, point, odometer);
-			
+
 		} else if (!availability[nextPoint1] && availability[nextPoint2] && availability[nextPoint3]) {
 
 			treeTravel(point, nextPoint3, odometer);

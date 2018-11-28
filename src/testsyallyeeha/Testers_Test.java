@@ -155,6 +155,63 @@ public class Testers_Test {
 		System.out.println("DONE");
 	}
 	
+	public static void levelTest() {
+		Grabber_Test.openHook();
+		
+		armMotor.setAcceleration(500);
+		armMotor.setSpeed(70);//100 for hugh level 
+		
+		armMotor.rotate(100);
+		
+		//for lower deck, sleep a bit
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		hookMotor.setSpeed(30);
+		Grabber_Test.closeHook();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Grabber_Test.openHook();
+		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		armMotor.setAcceleration(500);
+		armMotor.setSpeed(150);
+		while (armMotor.getTachoCount() != 0) {
+			armMotor.backward();
+		}
+		armMotor.resetTachoCount();
+	}
+	
+	public static void newLine(Odometer_Test odometer) {
+		
+		for(int i=0; i<12; i++) {
+			Navigation_Test.lineCorrection(odometer);
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+	}
+	
 	public static void tree(Odometer_Test odometer) {		
 		int color;
 		Grabber_Test.openHook();
